@@ -6,7 +6,7 @@
   <title>なつやすみ しゅくだい しんかんせん</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts (かわいい丸ゴシック) -->
+  <!-- Google Fonts (丸ゴシック風で子供向け) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500;700&display=swap" rel="stylesheet">
@@ -35,10 +35,20 @@
     /* ガタゴト揺れる電車のアニメーション */
     @keyframes trainWiggle {
       0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-4px) rotate(1deg); }
+      50% { transform: translateY(-3px) rotate(0.5deg); }
     }
     .train-active {
-      animation: trainWiggle 0.4s infinite ease-in-out;
+      animation: trainWiggle 0.3s infinite ease-in-out;
+    }
+    /* はっしゃ時の超特急アニメーション */
+    @keyframes trainFlyBy {
+      0% { transform: translateX(120%) translateY(-50%) scale(0.9); }
+      30% { transform: translateX(20%) translateY(-50%) scale(1.1); }
+      70% { transform: translateX(-50%) translateY(-50%) scale(1.1); }
+      100% { transform: translateX(-220%) translateY(-50%) scale(0.9); }
+    }
+    .fly-by-train {
+      animation: trainFlyBy 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
     /* キラキラアニメーション */
     @keyframes shine {
@@ -142,7 +152,7 @@
       <!-- 路線図カレンダー -->
       <div class="bg-white border-4 border-slate-800 rounded-3xl p-4 card-shadow">
         <h2 class="text-sm font-bold text-sky-600 flex items-center gap-1.5 mb-3">
-          🛤️ <ruby>うんてん路线<rt>うんてんろせん</rt></ruby> (カレンダー)
+          🛤️ <ruby>うんてん路線<rt>うんてんろせん</rt></ruby> (カレンダー)
         </h2>
         
         <div class="flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-thin scrollbar-thumb-sky-500">
@@ -192,7 +202,7 @@
         </div>
 
         <div class="space-y-4">
-          <!-- ① 生活リズムカード (最初と最後の1週間のみ動的に登場) -->
+          <!-- ① 生活リズムカード -->
           <div v-if="isRhythmCardPeriod(selectedDate)" class="flex items-center justify-between bg-gradient-to-r from-purple-50 to-purple-100 p-3 rounded-2xl border-2 border-purple-800 cursor-pointer animate-fade-in" @click="toggleDaily('rhythmCard')">
             <div class="flex items-center gap-3">
               <div class="text-2xl">⏰</div>
@@ -212,7 +222,7 @@
               <div class="text-2xl">📖</div>
               <div class="flex-1">
                 <h3 class="font-bold text-sm"><ruby>サマースキル<rt>さまーすきる</rt></ruby></h3>
-                <p class="text-[9px] text-slate-400">まいにち すこしずつ すすめよう！</p>
+                <p class="text-[9px] text-slate-400">まいにち すこしずつ すすすもう！</p>
               </div>
             </div>
             <div class="w-8 h-8 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all" :class="getDailyStatus('skill') ? 'bg-emerald-500 border-emerald-600 text-white' : 'bg-slate-100'">
@@ -305,7 +315,7 @@
         <div v-if="getSpecialType(selectedDate) === 'jump'" class="space-y-4">
           <div class="bg-yellow-100 border-4 border-yellow-400 rounded-2xl p-4 text-center">
             <span class="text-4xl block mb-1">🤸 💨</span>
-            <h3 class="font-extrabold text-sm text-yellow-900"><ruby>なわとび号<rt>号</rt></ruby> 運行中！</h3>
+            <h3 class="font-extrabold text-sm text-yellow-900"><ruby>なわとび号<rt>ごう</rt></ruby> 運行中！</h3>
             <p class="text-[10px] text-yellow-700 mt-1">
               今日はなわとびチャレンジの日！元気いっぱい体を動かそう！
             </p>
@@ -332,7 +342,7 @@
         <div v-if="getSpecialType(selectedDate) === 'keyboard'" class="space-y-4">
           <div class="bg-blue-100 border-4 border-blue-400 rounded-2xl p-4 text-center">
             <span class="text-4xl block mb-1">🎹 🎶</span>
-            <h3 class="font-extrabold text-sm text-blue-900"><ruby>けんばん号<rt>号</rt></ruby> 運行中！</h3>
+            <h3 class="font-extrabold text-sm text-blue-900"><ruby>けんばん号<rt>ごう</rt></ruby> 運行中！</h3>
             <p class="text-[10px] text-blue-700 mt-1">
               今日は鍵盤ハーモニカの日！きれいに音を出してみよう！
             </p>
@@ -524,8 +534,9 @@
           <h3 class="text-lg font-extrabold text-slate-900 mb-1">
             あたらしい しんかんせん！
           </h3>
-          <div class="my-4 p-4 bg-slate-100 rounded-2xl border-2 border-dashed border-slate-400 flex flex-col items-center">
-            <span class="text-6xl mb-2">{{ gachaResult.emoji }}</span>
+          <div class="my-4 p-4 bg-slate-100 rounded-2xl border-2 border-dashed border-slate-400 flex flex-col items-center overflow-hidden">
+            <!-- リアルな本物風SVG新幹線イメージ -->
+            <div class="w-full max-w-[240px] mb-4 bg-slate-800 rounded-xl p-3 border border-slate-700 shadow-inner" v-html="gachaResult.svg"></div>
             <span class="font-extrabold text-lg text-slate-800">{{ gachaResult.name }}</span>
             <span class="text-xs bg-sky-100 text-sky-700 font-bold px-3 py-1 rounded-full border border-sky-300 mt-2">
               {{ gachaResult.desc }}
@@ -543,20 +554,50 @@
       <h2 class="text-md font-bold text-slate-800 flex items-center gap-1.5 mb-4">
         📖 でんしゃ・しんかんせん図鑑
       </h2>
-      <div class="grid grid-cols-4 gap-3">
+      <div class="grid grid-cols-2 gap-3">
         <div v-for="train in trainList" :key="train.id" 
              :class="isUnlocked(train.id) ? 'bg-sky-50 border-sky-400' : 'bg-slate-100 border-slate-300 grayscale opacity-40'"
-             class="border-2 p-2 rounded-2xl flex flex-col items-center justify-center relative group">
-          <span class="text-2xl mb-1">{{ train.emoji }}</span>
-          <span class="text-[8px] font-bold text-slate-700 text-center line-clamp-1">
-            {{ isUnlocked(train.id) ? train.name : '???' }}
+             class="border-2 p-3 rounded-2xl flex flex-col items-center justify-center relative overflow-hidden">
+          
+          <!-- 図鑑用ミニ本物風SVG -->
+          <div class="w-full h-16 flex items-center justify-center bg-slate-800/90 rounded-lg p-1.5 mb-2" v-html="train.svg"></div>
+          
+          <span class="text-[10px] font-extrabold text-slate-800 text-center line-clamp-1">
+            {{ isUnlocked(train.id) ? train.name : '???（ロック中）' }}
           </span>
-          <div v-if="!isUnlocked(train.id)" class="absolute inset-0 flex items-center justify-center bg-slate-900/10 rounded-2xl">
-            🔒
+          <div v-if="!isUnlocked(train.id)" class="absolute inset-0 flex items-center justify-center bg-slate-900/45 rounded-2xl font-bold text-white text-sm">
+            🔒 ロック中
           </div>
         </div>
       </div>
     </section>
+
+    <!-- 発車セレブレーションアニメーションオーバーレイ -->
+    <div v-if="showCelebration" class="fixed inset-0 bg-sky-900/90 z-50 flex flex-col items-center justify-center overflow-hidden">
+      <!-- キラキラ紙吹雪 Canvas -->
+      <canvas id="confetti-canvas" class="absolute inset-0 pointer-events-none w-full h-full"></canvas>
+      
+      <div class="text-center relative z-10 p-6">
+        <div class="text-yellow-300 text-4xl font-extrabold mb-2 animate-bounce">
+          しゅっぱつ しんこう！！！
+        </div>
+        <div class="text-white text-lg font-bold mb-12">
+          きょうの しゅくだい ぜんぶクリア！ 🏆
+        </div>
+
+        <!-- 走る巨大リアルSVG新幹線 -->
+        <div class="absolute top-1/2 left-0 w-full flex justify-center transform -translate-y-1/2 pointer-events-none">
+          <div class="w-72 h-32 bg-slate-800 p-4 rounded-3xl border-4 border-yellow-400 shadow-2xl fly-by-train flex flex-col justify-center items-center">
+            <div class="w-full" v-html="currentDepartTrainSvg"></div>
+            <div class="text-yellow-300 font-extrabold text-sm mt-2 tracking-wider">超特急 はっしゃ！</div>
+          </div>
+        </div>
+
+        <button @click="closeCelebration" class="mt-48 px-8 py-3 bg-red-500 border-4 border-white text-white font-extrabold text-md rounded-2xl shadow-lg hover:bg-red-600 transition-all">
+          もどる 🚉
+        </button>
+      </div>
+    </div>
 
     <!-- フッター -->
     <footer class="mt-8 text-center text-xs text-slate-400">
@@ -569,12 +610,155 @@
   <script>
     const { createApp, ref, computed, onMounted } = Vue;
 
+    // リアルなSVGモデリング新幹線
+    const svgHayabusa = `
+      <svg viewBox="0 0 120 40" class="w-full h-auto">
+        <!-- 背景のレール -->
+        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
+        <!-- はやぶさノーズ -->
+        <path d="M 10,24 Q 45,24 65,19 Q 95,14 115,31 Q 120,35 120,36 L 10,36 Z" fill="#ffffff" />
+        <path d="M 10,6 L 65,6 Q 80,6 90,11 Q 105,17 115,31 Q 95,14 65,19 Q 45,24 10,24 Z" fill="#008754" />
+        <!-- ピンクのライン -->
+        <path d="M 10,24 Q 45,24 65,19 Q 95,14 115,31" stroke="#e11d48" stroke-width="2" fill="none" />
+        <!-- 運転席の窓 -->
+        <path d="M 85,12 Q 90,12 94,15 L 82,18 Z" fill="#1e293b" />
+        <!-- 客車の窓 -->
+        <rect x="20" y="10" width="6" height="4" rx="1" fill="#1e293b" />
+        <rect x="32" y="10" width="6" height="4" rx="1" fill="#1e293b" />
+        <rect x="44" y="10" width="6" height="4" rx="1" fill="#1e293b" />
+      </svg>
+    `;
+
+    const svgKomachi = `
+      <svg viewBox="0 0 120 40" class="w-full h-auto">
+        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
+        <!-- こまちボディ -->
+        <path d="M 10,24 Q 45,24 65,20 Q 90,15 115,31 Q 120,35 120,36 L 10,36 Z" fill="#ffffff" />
+        <path d="M 10,6 L 65,6 Q 80,6 90,11 Q 105,17 115,31 Q 90,15 65,20 Q 45,24 10,24 Z" fill="#b81d24" />
+        <!-- グレーのステップライン -->
+        <path d="M 10,24 Q 45,24 65,20 Q 90,15 115,31" stroke="#4b5563" stroke-width="1.5" fill="none" />
+        <!-- 運転席の窓 -->
+        <path d="M 82,13 Q 88,13 92,16 L 80,18 Z" fill="#1e293b" />
+        <!-- 客窓 -->
+        <rect x="20" y="11" width="6" height="4" rx="1" fill="#1e293b" />
+        <rect x="32" y="11" width="6" height="4" rx="1" fill="#1e293b" />
+        <rect x="44" y="11" width="6" height="4" rx="1" fill="#1e293b" />
+      </svg>
+    `;
+
+    const svgDrYellow = `
+      <svg viewBox="0 0 120 40" class="w-full h-auto">
+        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
+        <!-- ドクターイエロー -->
+        <path d="M 10,6 L 60,6 Q 80,6 90,13 Q 105,20 115,32 Q 120,35 120,36 L 10,36 Z" fill="#eab308" />
+        <!-- ブルーのストライプ -->
+        <path d="M 10,24 Q 50,24 70,22 Q 90,18 110,32" stroke="#1d4ed8" stroke-width="3" fill="none" />
+        <!-- 運転席 -->
+        <path d="M 85,11 Q 91,11 94,15 L 83,17 Z" fill="#1e293b" />
+        <rect x="20" y="11" width="8" height="4" rx="1" fill="#1e293b" />
+        <rect x="35" y="11" width="8" height="4" rx="1" fill="#1e293b" />
+        <rect x="50" y="11" width="8" height="4" rx="1" fill="#1e293b" />
+      </svg>
+    `;
+
+    const svgKagayaki = `
+      <svg viewBox="0 0 120 40" class="w-full h-auto">
+        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
+        <!-- かがやきボディ -->
+        <path d="M 10,23 Q 45,23 65,19 Q 95,14 115,31 L 120,36 L 10,36 Z" fill="#f8fafc" />
+        <path d="M 10,6 L 65,6 Q 80,6 90,11 Q 105,17 115,31 Q 95,14 65,19 Q 45,23 10,23 Z" fill="#1e40af" />
+        <!-- 銅（ゴールド）のライン -->
+        <path d="M 10,23 Q 45,23 65,19 Q 95,14 115,31" stroke="#ca8a04" stroke-width="2.5" fill="none" />
+        <!-- 窓 -->
+        <path d="M 84,11 Q 89,11 93,14 L 81,17 Z" fill="#1e293b" />
+        <rect x="20" y="10" width="6" height="4" rx="1" fill="#1e293b" />
+        <rect x="32" y="10" width="6" height="4" rx="1" fill="#1e293b" />
+        <rect x="44" y="10" width="6" height="4" rx="1" fill="#1e293b" />
+      </svg>
+    `;
+
+    const svgNozomi = `
+      <svg viewBox="0 0 120 40" class="w-full h-auto">
+        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
+        <!-- のぞみN700S -->
+        <path d="M 10,6 L 65,6 Q 80,6 90,12 Q 105,18 115,32 Q 120,35 120,36 L 10,36 Z" fill="#f8fafc" />
+        <!-- 青のデュアルスプリームライン -->
+        <path d="M 10,24 Q 50,24 70,22 Q 90,18 112,32" stroke="#1d4ed8" stroke-width="2.5" fill="none" />
+        <path d="M 10,28 Q 50,28 70,26 Q 90,22 108,34" stroke="#1d4ed8" stroke-width="1" fill="none" />
+        <!-- 窓 -->
+        <path d="M 83,12 Q 88,12 92,15 L 81,17 Z" fill="#1e293b" />
+        <rect x="20" y="11" width="6" height="4" rx="1" fill="#1e293b" />
+        <rect x="32" y="11" width="6" height="4" rx="1" fill="#1e293b" />
+        <rect x="44" y="11" width="6" height="4" rx="1" fill="#1e293b" />
+      </svg>
+    `;
+
+    const svgShinkansen500 = `
+      <svg viewBox="0 0 120 40" class="w-full h-auto">
+        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
+        <!-- 戦闘機型500系新幹線 -->
+        <path d="M 10,8 L 65,8 Q 80,8 92,14 Q 106,20 116,33 Q 120,35 120,36 L 10,36 Z" fill="#cbd5e1" />
+        <!-- 鋭い青のウェーブライン -->
+        <path d="M 10,18 L 120,18" fill="#1e3a8a" opacity="0.3" />
+        <path d="M 10,24 Q 45,24 65,22 Q 90,18 115,32" stroke="#1d4ed8" stroke-width="3" fill="none" />
+        <!-- 特有のキャノピー（コクピット風窓） -->
+        <path d="M 85,13 Q 92,13 95,17 Q 85,19 82,18 Z" fill="#1e293b" />
+        <circle cx="25" cy="14" r="2.5" fill="#1e293b" />
+        <circle cx="37" cy="14" r="2.5" fill="#1e293b" />
+        <circle cx="49" cy="14" r="2.5" fill="#1e293b" />
+      </svg>
+    `;
+
+    const svgLinear = `
+      <svg viewBox="0 0 120 40" class="w-full h-auto">
+        <!-- 磁気浮上レール -->
+        <rect x="0" y="32" width="120" height="6" fill="#475569" />
+        <!-- 超流線型リニアL0系 -->
+        <path d="M 10,6 L 60,6 Q 80,6 95,11 Q 110,16 118,30 L 10,30 Z" fill="#ffffff" />
+        <!-- シャープなブルーのライン -->
+        <path d="M 10,18 Q 60,18 80,16 Q 100,13 115,25" stroke="#1e3a8a" stroke-width="3.5" fill="none" />
+        <!-- 窓 -->
+        <path d="M 94,10 L 100,12 L 95,13 Z" fill="#1e293b" />
+        <rect x="25" y="10" width="8" height="2" rx="0.5" fill="#1e293b" />
+        <rect x="40" y="10" width="8" height="2" rx="0.5" fill="#1e293b" />
+        <rect x="55" y="10" width="8" height="2" rx="0.5" fill="#1e293b" />
+      </svg>
+    `;
+
+    const svgSl = `
+      <svg viewBox="0 0 120 40" class="w-full h-auto">
+        <!-- 線路 -->
+        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
+        <!-- SLのメイン煙突・ボイラー -->
+        <rect x="15" y="10" width="60" height="20" rx="2" fill="#1e293b" />
+        <rect x="75" y="4" width="25" height="26" rx="2" fill="#0f172a" />
+        <!-- 煙突と除煙板 -->
+        <rect x="22" y="2" width="8" height="10" fill="#0f172a" />
+        <path d="M 12,10 L 15,10 L 15,26 L 12,26 Z" fill="#1e293b" />
+        <!-- キャブ（運転席）の窓 -->
+        <rect x="80" y="8" width="12" height="10" rx="1" fill="#fef08a" />
+        <!-- 金色の装飾パーツ -->
+        <circle cx="45" cy="10" r="4" fill="#ca8a04" />
+        <rect x="62" y="6" width="6" height="6" fill="#ca8a04" />
+        <!-- 赤い巨大動輪 -->
+        <circle cx="30" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
+        <circle cx="50" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
+        <circle cx="70" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
+        <!-- 連結棒 -->
+        <line x1="30" y1="30" x2="70" y2="30" stroke="#f1f5f9" stroke-width="2" />
+        <!-- もくもく煙 -->
+        <circle cx="26" cy="-2" r="5" fill="#94a3b8" opacity="0.6" />
+        <circle cx="34" cy="-6" r="7" fill="#cbd5e1" opacity="0.4" />
+      </svg>
+    `;
+
     createApp({
       setup() {
         const audioStarted = ref(false);
         const currentTab = ref('daily');
         const selectedDate = ref('');
         const isRunning = ref(false);
+        const showCelebration = ref(false); // 発車豪華イベントの表示フラグ
         
         // 宿題データ
         const dailyLogs = ref({});
@@ -602,16 +786,16 @@
         const collectedTrains = ref([]);
         const gachaResult = ref(null);
 
-        // 電車図鑑リスト
+        // 電車図鑑リスト（絵文字から超リアルなSVGへアップグレード！）
         const trainList = [
-          { id: 'hayabusa', name: 'E5系 はやぶさ', emoji: '🟢', desc: '日本でいちばん速い新幹線！', color: 'bg-emerald-500' },
-          { id: 'komachi', name: 'E6系 こまち', emoji: '🔴', desc: '秋田にいく、真っ赤でカッコいい新幹線！', color: 'bg-red-500' },
-          { id: 'dr_yellow', name: 'ドクターイエロー', emoji: '🟡', desc: '見ると幸せになれる、線路を点検する新幹線！', color: 'bg-yellow-400' },
-          { id: 'kagayaki', name: 'E7系 かがやき', emoji: '🔵', desc: '金沢にいく、青と金色のリッチな新幹線！', color: 'bg-blue-600' },
-          { id: 'nozomi', name: 'N700S のぞみ', emoji: '⚪', desc: '東海道をビューンと走る最新ののぞみ！', color: 'bg-slate-200' },
-          { id: 'shinkansen_500', name: '500系 新幹線', emoji: '🚅', desc: '戦闘機みたいなデザイン of 超クールな新幹線！', color: 'bg-indigo-400' },
-          { id: 'linear', name: 'L0系 リニア', emoji: '🚀', desc: '磁石で浮いて時速500キロで走る未来の電車！', color: 'bg-slate-300' },
-          { id: 'sl', name: 'SLやまぐち号', emoji: '🚂', desc: 'シュッシュッポッポと煙をはくロマンあふれる蒸気機関車！', color: 'bg-slate-800' }
+          { id: 'hayabusa', name: 'E5系 はやぶさ', desc: '日本でいちばん速い新幹線！', svg: svgHayabusa },
+          { id: 'komachi', name: 'E6系 こまち', desc: '秋田にいく、真っ赤でカッコいい新幹線！', svg: svgKomachi },
+          { id: 'dr_yellow', name: 'ドクターイエロー', desc: '見ると幸せになれる、線路を点検する新幹線！', svg: svgDrYellow },
+          { id: 'kagayaki', name: 'E7系 かがやき', desc: '金沢にいく、青と金色のリッチな新幹線！', svg: svgKagayaki },
+          { id: 'nozomi', name: 'N700S のぞみ', desc: '東海道をビューンと走る最新ののぞみ！', svg: svgNozomi },
+          { id: 'shinkansen_500', name: '500系 新幹線', desc: '戦闘機みたいなデザインの超クールな新幹線！', svg: svgShinkansen500 },
+          { id: 'linear', name: 'L0系 リニア', desc: '磁石で浮いて時速500キロで走る未来の電車！', svg: svgLinear },
+          { id: 'sl', name: 'SLやまぐち号', desc: '煙をはくロマンあふれる蒸気機関車！', svg: svgSl }
         ];
 
         const totalTrainCards = trainList.length;
@@ -754,7 +938,6 @@
         const getSpecialType = (dateStr) => {
           const index = getDayIndex(dateStr);
           if (index === -1) return null;
-          // indexが偶数の日は「なわとび」、奇数の日は「けんばんハーモニカ」
           return index % 2 === 0 ? 'jump' : 'keyboard';
         };
 
@@ -813,11 +996,11 @@
           dailyLogs.value[selectedDate.value][item] = !isCheckedBefore;
           playStampSound();
 
-          // 【大改良】課題をクリアするごとにリアルタイムで1マイル増減！
+          // クリアごとにリアルタイムで1マイル増減！
           if (dailyLogs.value[selectedDate.value][item]) {
-            points.value += 1; // 1つの課題クリア ➔ +1マイル
+            points.value += 1;
           } else {
-            points.value = Math.max(0, points.value - 1); // チェックをはずす ➔ -1マイル
+            points.value = Math.max(0, points.value - 1);
           }
 
           // すべて完了した時のボーナスマイル同期
@@ -827,10 +1010,10 @@
           if (dayObj) {
             if (!wasCompleted && isNowCompleted) {
               dayObj.isCompleted = true;
-              points.value += 5; // その日の宿題を完全クリア ➔ さらにボーナス+5マイル！
+              points.value += 5; // コンプリートボーナス+5！
             } else if (wasCompleted && !isNowCompleted) {
               dayObj.isCompleted = false;
-              points.value = Math.max(0, points.value - 5); // 未達成に戻った ➔ ボーナス5マイル引き
+              points.value = Math.max(0, points.value - 5);
             }
           }
           saveToLocalStorage();
@@ -849,19 +1032,15 @@
           }
           
           const currentVal = specialLogs.value[selectedDate.value][item];
-          
-          // トグル
           specialLogs.value[selectedDate.value][item] = !currentVal;
           playStampSound();
 
-          // 特別列車はクリアするだけで【3マイル】もらえます！
           if (specialLogs.value[selectedDate.value][item]) {
             points.value += 3; 
           } else {
             points.value = Math.max(0, points.value - 3); 
           }
 
-          // 日にちのカレンダー完了状態を再チェック
           const isNowCompleted = isDailyAllCompleted.value;
           const dayObj = daysList.value.find(d => d.date === selectedDate.value);
           if (dayObj) {
@@ -871,7 +1050,6 @@
           saveToLocalStorage();
         };
 
-        // とくべつ列車ミッションがクリアされているか（日替わり対象外なので特別列車のみで独立して判断）
         const isSpecialCompleted = (dateStr) => {
           const type = getSpecialType(dateStr);
           if (!type) return true;
@@ -879,33 +1057,122 @@
           return !!(log && log[type]);
         };
 
-        // 毎日の「すべてクリア」判定 (「とくべつ列車」を除外することで、毎日うんてんを埋めれば即はっしゃ可能に！)
         const isDailyAllCompleted = computed(() => {
           const dLog = dailyLogs.value[selectedDate.value];
           if (!dLog) return false;
 
-          // 基本の5つのしゅくだい
           const hasBaseDaily = dLog.skill && dLog.water && dLog.math && dLog.diary && dLog.tablet;
-
-          // 生活リズムカード対象期間なら、それも必須
           const hasRhythmDaily = isRhythmCardPeriod(selectedDate.value) ? dLog.rhythmCard : true;
 
           return !!(hasBaseDaily && hasRhythmDaily);
         });
 
-        // 電車の出発進行！
+        // 【大改良】電車の豪華出発進行アニメーションと紙吹雪
+        const currentDepartTrainSvg = computed(() => {
+          // ガチャで獲得済みの新幹線からランダムで一本を走らせる
+          if (collectedTrains.value.length > 0) {
+            const unlocked = trainList.filter(t => collectedTrains.value.includes(t.id));
+            const randomTrain = unlocked[Math.floor(Math.random() * unlocked.length)];
+            return randomTrain.svg;
+          }
+          // まだ何も解放していなければ、デフォルトでのぞみ号
+          return svgNozomi;
+        });
+
         const departTrain = () => {
           if (!isDailyAllCompleted.value) return;
           initAudio();
           isRunning.value = true;
           playTrainWhistle();
           playChugChug();
+
+          // 豪華セレブレーションを開始！
+          showCelebration.value = true;
+
+          // 1.5秒後にトップバーのミニ新幹線アニメを停止
           setTimeout(() => {
             isRunning.value = false;
           }, 1500);
+
+          // 紙吹雪を降らせる
+          setTimeout(() => {
+            startConfetti();
+          }, 100);
         };
 
-        // 宿題スタンプ（期間中のミッション）
+        const closeCelebration = () => {
+          showCelebration.value = false;
+          stopConfetti();
+        };
+
+        // 紙吹雪エンジンの簡易実装（HTML5 Canvas）
+        let confettiInterval = null;
+        const startConfetti = () => {
+          const canvas = document.getElementById('confetti-canvas');
+          if (!canvas) return;
+          const ctx = canvas.getContext('2d');
+          
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+
+          const particles = [];
+          const colors = ['#f59e0b', '#ef4444', '#3b82f6', '#10b981', '#ec4899', '#8b5cf6'];
+
+          for (let i = 0; i < 100; i++) {
+            particles.push({
+              x: Math.random() * canvas.width,
+              y: Math.random() * canvas.height - canvas.height,
+              r: Math.random() * 6 + 4,
+              d: Math.random() * canvas.height,
+              color: colors[Math.floor(Math.random() * colors.length)],
+              tilt: Math.random() * 10 - 5,
+              tiltAngleIncremental: Math.random() * 0.07 + 0.02,
+              tiltAngle: 0
+            });
+          }
+
+          const draw = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, idx) => {
+              p.tiltAngle += p.tiltAngleIncremental;
+              p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+              p.x += Math.sin(p.tiltAngle);
+              p.tilt = Math.sin(p.tiltAngle - idx / 3) * 15;
+
+              ctx.beginPath();
+              ctx.lineWidth = p.r;
+              ctx.strokeStyle = p.color;
+              ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+              ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+              ctx.stroke();
+
+              // ループさせる
+              if (p.y > canvas.height) {
+                particles[idx] = {
+                  x: Math.random() * canvas.width,
+                  y: -20,
+                  r: p.r,
+                  d: p.d,
+                  color: p.color,
+                  tilt: p.tilt,
+                  tiltAngleIncremental: p.tiltAngleIncremental,
+                  tiltAngle: p.tiltAngle
+                };
+              }
+            });
+          };
+
+          confettiInterval = setInterval(draw, 20);
+        };
+
+        const stopConfetti = () => {
+          if (confettiInterval) {
+            clearInterval(confettiInterval);
+            confettiInterval = null;
+          }
+        };
+
+        // 宿題スタンプ
         const changeMissionCount = (key, delta) => {
           initAudio();
           const maxMap = {
@@ -922,12 +1189,10 @@
             missions.value[key] = next;
             playStampSound();
             
-            // 最大（完了）になったら10マイルを付与
             if (next === max) {
               points.value += 10;
               playFanfare();
             }
-            // もし最大状態から引き算された（完了キャンセル）場合は10マイルを回収
             else if (current === max && next < max) {
               points.value = Math.max(0, points.value - 10);
             }
@@ -935,22 +1200,20 @@
           }
         };
 
-        // 持ち物のチェック (トグル＆マイル増減)
         const toggleLuggage = (index) => {
           initAudio();
           luggage.value[index].checked = !luggage.value[index].checked;
           playStampSound();
           if (luggage.value[index].checked) {
-            points.value += 1; // 荷物を載せたら1マイル
+            points.value += 1;
           } else {
-            points.value = Math.max(0, points.value - 1); // 外したら1マイル回収
+            points.value = Math.max(0, points.value - 1);
           }
           saveToLocalStorage();
         };
 
         // 進捗全体の計算
         const totalMissionsCount = computed(() => {
-          // 毎日宿題数（日数×ベース5個 ＋ リズム対象日（14日分）×1個）
           let dailyTotal = daysList.value.length * 5;
           daysList.value.forEach(day => {
             if (isRhythmCardPeriod(day.date)) {
@@ -958,13 +1221,8 @@
             }
           });
 
-          // 特別列車（毎日日替わりで1項目ずつ運行。全日程分 = 日数分）
           const specialTotal = daysList.value.length;
-
-          // 期間中 (絵日記2 + 鍵盤3 + 読書30 + 作品2) = 37
           const occasionalTotal = 2 + 3 + 30 + 2;
-
-          // 持ち物 8
           const luggageTotal = luggage.value.length;
 
           return dailyTotal + specialTotal + occasionalTotal + luggageTotal;
@@ -972,18 +1230,15 @@
 
         const completedMissionsCount = computed(() => {
           let count = 0;
-          // 毎日のクリア数
           Object.entries(dailyLogs.value).forEach(([date, day]) => {
             if (day.skill) count++;
             if (day.water) count++;
             if (day.math) count++;
             if (day.diary) count++;
             if (day.tablet) count++;
-            // リズムカード
             if (isRhythmCardPeriod(date) && day.rhythmCard) count++;
           });
 
-          // 特別列車のクリア数（毎日1項目）
           daysList.value.forEach(day => {
             const type = getSpecialType(day.date);
             if (type && specialLogs.value[day.date] && specialLogs.value[day.date][type]) {
@@ -991,13 +1246,11 @@
             }
           });
 
-          // 期間中
           count += missions.value.pictureDiary;
           count += missions.value.keyboardHarmonica;
           count += missions.value.reading;
           count += missions.value.artWork;
 
-          // 持ち物
           luggage.value.forEach(item => {
             if (item.checked) count++;
           });
@@ -1056,11 +1309,31 @@
             collectedTrains: collectedTrains.value,
             daysList: daysList.value
           };
-          localStorage.setItem('shinkansen_homework_data_v4', JSON.stringify(data));
+          localStorage.setItem('shinkansen_homework_data_v5', JSON.stringify(data));
         };
 
+        // 過去のすべてのバージョン（v1〜v4）から自動データ移行！
         const loadFromLocalStorage = () => {
-          const saved = localStorage.getItem('shinkansen_homework_data_v4');
+          let saved = localStorage.getItem('shinkansen_homework_data_v5');
+          
+          if (!saved) {
+            const oldKeys = [
+              'shinkansen_homework_data_v4',
+              'shinkansen_homework_data_v3',
+              'shinkansen_homework_data_v2',
+              'shinkansen_homework_data_v1'
+            ];
+            for (const oldKey of oldKeys) {
+              const oldData = localStorage.getItem(oldKey);
+              if (oldData) {
+                saved = oldData;
+                localStorage.setItem('shinkansen_homework_data_v5', oldData);
+                console.log(`🎉 データを自動で ${oldKey} から v5（超リアル新幹線版） へ引き継ぎました！`);
+                break;
+              }
+            }
+          }
+
           if (saved) {
             try {
               const data = JSON.parse(saved);
@@ -1117,6 +1390,8 @@
           completedMissionsCount,
           totalMissionsCount,
           isRunning,
+          showCelebration,
+          currentDepartTrainSvg,
           
           isRhythmCardPeriod,
           getSpecialType,
@@ -1134,9 +1409,9 @@
           toggleSpecial,
           isDailyAllCompleted,
           departTrain,
+          closeCelebration,
           
           changeMissionCount,
-          
           toggleLuggage,
           spinGacha,
           isUnlocked
