@@ -40,12 +40,12 @@
     .train-active {
       animation: trainWiggle 0.3s infinite ease-in-out;
     }
-    /* はっしゃ時の超特急アニメーション */
+    /* 【修正】はっしゃ時の超特急アニメーションを左から右（前向き）へ！ */
     @keyframes trainFlyBy {
-      0% { transform: translateX(120%) translateY(-50%) scale(0.9); }
-      30% { transform: translateX(20%) translateY(-50%) scale(1.1); }
-      70% { transform: translateX(-50%) translateY(-50%) scale(1.1); }
-      100% { transform: translateX(-220%) translateY(-50%) scale(0.9); }
+      0% { transform: translateX(-100vw) translateY(-50%) scale(0.9); }
+      30% { transform: translateX(-15vw) translateY(-50%) scale(1.1); }
+      70% { transform: translateX(15vw) translateY(-50%) scale(1.1); }
+      100% { transform: translateX(100vw) translateY(-50%) scale(0.9); }
     }
     .fly-by-train {
       animation: trainFlyBy 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
@@ -301,7 +301,7 @@
       </div>
     </div>
 
-    <!-- タブ2: とくべつれっしゃ（日替わりで交互に出動！） -->
+    <!-- タブ2: とくべつれっしゃ -->
     <div v-show="currentTab === 'special'" class="space-y-4">
       <div class="bg-gradient-to-b from-amber-50 to-orange-50 border-4 border-slate-800 rounded-3xl p-5 card-shadow">
         <div class="flex justify-between items-center border-b-2 border-dashed border-orange-300 pb-3 mb-4">
@@ -585,7 +585,7 @@
           きょうの しゅくだい ぜんぶクリア！ 🏆
         </div>
 
-        <!-- 走る巨大リアルSVG新幹線 -->
+        <!-- 走る巨大リアルSVG新幹線 (キーフレームに沿って左から右へ！) -->
         <div class="absolute top-1/2 left-0 w-full flex justify-center transform -translate-y-1/2 pointer-events-none">
           <div class="w-72 h-32 bg-slate-800 p-4 rounded-3xl border-4 border-yellow-400 shadow-2xl fly-by-train flex flex-col justify-center items-center">
             <div class="w-full" v-html="currentDepartTrainSvg"></div>
@@ -610,7 +610,7 @@
   <script>
     const { createApp, ref, computed, onMounted } = Vue;
 
-    // リアルなSVGモデリング新幹線
+    // リアルなSVGモデリング新幹線 (すべて顔・ノーズが右「→」を向くように統一設計)
     const svgHayabusa = `
       <svg viewBox="0 0 120 40" class="w-full h-auto">
         <!-- 背景のレール -->
@@ -725,30 +725,34 @@
       </svg>
     `;
 
+    // 【修正】SLが常に進行方向（右向き）を向くように、グループ全体を水平反転(scaleX(-1))させて再定義！
     const svgSl = `
       <svg viewBox="0 0 120 40" class="w-full h-auto">
         <!-- 線路 -->
         <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
-        <!-- SLのメイン煙突・ボイラー -->
-        <rect x="15" y="10" width="60" height="20" rx="2" fill="#1e293b" />
-        <rect x="75" y="4" width="25" height="26" rx="2" fill="#0f172a" />
-        <!-- 煙突と除煙板 -->
-        <rect x="22" y="2" width="8" height="10" fill="#0f172a" />
-        <path d="M 12,10 L 15,10 L 15,26 L 12,26 Z" fill="#1e293b" />
-        <!-- キャブ（運転席）の窓 -->
-        <rect x="80" y="8" width="12" height="10" rx="1" fill="#fef08a" />
-        <!-- 金色の装飾パーツ -->
-        <circle cx="45" cy="10" r="4" fill="#ca8a04" />
-        <rect x="62" y="6" width="6" height="6" fill="#ca8a04" />
-        <!-- 赤い巨大動輪 -->
-        <circle cx="30" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
-        <circle cx="50" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
-        <circle cx="70" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
-        <!-- 連結棒 -->
-        <line x1="30" y1="30" x2="70" y2="30" stroke="#f1f5f9" stroke-width="2" />
-        <!-- もくもく煙 -->
-        <circle cx="26" cy="-2" r="5" fill="#94a3b8" opacity="0.6" />
-        <circle cx="34" cy="-6" r="7" fill="#cbd5e1" opacity="0.4" />
+        <!-- 右向きに走らせるため、120px幅のエリアで水平反転 -->
+        <g transform="translate(120, 0) scale(-1, 1)">
+          <!-- SLのメイン煙突・ボイラー -->
+          <rect x="15" y="10" width="60" height="20" rx="2" fill="#1e293b" />
+          <rect x="75" y="4" width="25" height="26" rx="2" fill="#0f172a" />
+          <!-- 煙突と除煙板 -->
+          <rect x="22" y="2" width="8" height="10" fill="#0f172a" />
+          <path d="M 12,10 L 15,10 L 15,26 L 12,26 Z" fill="#1e293b" />
+          <!-- キャブ（運転席）の窓 -->
+          <rect x="80" y="8" width="12" height="10" rx="1" fill="#fef08a" />
+          <!-- 金色の装飾パーツ -->
+          <circle cx="45" cy="10" r="4" fill="#ca8a04" />
+          <rect x="62" y="6" width="6" height="6" fill="#ca8a04" />
+          <!-- 赤い巨大動輪 -->
+          <circle cx="30" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
+          <circle cx="50" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
+          <circle cx="70" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
+          <!-- 連結棒 -->
+          <line x1="30" y1="30" x2="70" y2="30" stroke="#f1f5f9" stroke-width="2" />
+          <!-- もくもく煙 -->
+          <circle cx="26" cy="-2" r="5" fill="#94a3b8" opacity="0.6" />
+          <circle cx="34" cy="-6" r="7" fill="#cbd5e1" opacity="0.4" />
+        </g>
       </svg>
     `;
 
@@ -789,7 +793,7 @@
         // 電車図鑑リスト（絵文字から超リアルなSVGへアップグレード！）
         const trainList = [
           { id: 'hayabusa', name: 'E5系 はやぶさ', desc: '日本でいちばん速い新幹線！', svg: svgHayabusa },
-          { id: 'komachi', name: 'E6系 こまち', desc: '秋田にいく、真っ赤でカッコいい新幹線！', svg: svgKomachi },
+          { id: 'komachi', name: 'E6系 こまち', desc: '秋田にいく、真っ刻でカッコいい新幹線！', svg: svgKomachi },
           { id: 'dr_yellow', name: 'ドクターイエロー', desc: '見ると幸せになれる、線路を点検する新幹線！', svg: svgDrYellow },
           { id: 'kagayaki', name: 'E7系 かがやき', desc: '金沢にいく、青と金色のリッチな新幹線！', svg: svgKagayaki },
           { id: 'nozomi', name: 'N700S のぞみ', desc: '東海道をビューンと走る最新ののぞみ！', svg: svgNozomi },
@@ -800,7 +804,6 @@
 
         const totalTrainCards = trainList.length;
 
-        // Web Audio APIの初期化
         let audioCtx = null;
         
         const initAudio = () => {
