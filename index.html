@@ -306,6 +306,14 @@
                   class="w-full py-4 rounded-2xl font-extrabold text-lg border-4 border-slate-800 btn-shadow flex items-center justify-center gap-2 transition-all">
             <span>🚄</span>
             <span>{{ isDailyAllCompleted ? 'しゅっぱつ しんこう！！' : 'ぜんぶクリアで はっしゃ！' }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- タブ2: とくべつれっしゃ（日替わりで交互に出動！） -->
+    <div v-show="currentTab === 'special'" class="space-y-4">
+      <div class="bg-gradient-to-b from-amber-50 to-orange-50 border-4 border-slate-800 rounded-3xl p-5 card-shadow">
         <!-- とくべつ列車 ダイヤ -->
         <div class="flex justify-between items-center border-b-2 border-dashed border-orange-300 pb-3 mb-4">
           <span class="text-xs font-bold text-slate-500">⚡ とくべつ れっしゃ ダイヤ</span>
