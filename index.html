@@ -6,7 +6,7 @@
   <title>なつやすみ しゅくだい しんかんせん</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts (丸ゴシック風で子供向け) -->
+  <!-- Google Fonts (Kiwi Maru 丸ゴシック) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500;700&display=swap" rel="stylesheet">
@@ -32,25 +32,23 @@
     .card-shadow {
       box-shadow: 0 6px 0px #e2e8f0;
     }
-    /* ガタゴト揺れる電車のアニメーション */
     @keyframes trainWiggle {
       0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-3px) rotate(0.5deg); }
+      50% { transform: translateY(-4px) rotate(1deg); }
     }
     .train-active {
-      animation: trainWiggle 0.3s infinite ease-in-out;
+      animation: trainWiggle 0.4s infinite ease-in-out;
     }
-    /* 【修正】はっしゃ時の超特急アニメーションを左から右（前向き）へ！ */
-    @keyframes trainFlyBy {
-      0% { transform: translateX(-100vw) translateY(-50%) scale(0.9); }
-      30% { transform: translateX(-15vw) translateY(-50%) scale(1.1); }
-      70% { transform: translateX(15vw) translateY(-50%) scale(1.1); }
-      100% { transform: translateX(100vw) translateY(-50%) scale(0.9); }
+    /* 出発進行で電車が左から入り、中央で一時停止してじっくり見せてから右へ走り去るアニメーション */
+    @keyframes trainRunPauseInCenter {
+      0% { transform: translateX(-120vw); }
+      35% { transform: translateX(0); }      /* 中央に到着 */
+      65% { transform: translateX(0); }      /* 中央でじっくり停止（ポーズ） */
+      100% { transform: translateX(120vw); }  /* 右へビューンと走り去る */
     }
-    .fly-by-train {
-      animation: trainFlyBy 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    .animate-train-run-pause {
+      animation: trainRunPauseInCenter 3.6s ease-in-out forwards;
     }
-    /* キラキラアニメーション */
     @keyframes shine {
       0% { left: -100%; }
       50% { left: 100%; }
@@ -70,12 +68,12 @@
 
   <div id="app" class="max-w-md mx-auto px-4 pt-6" v-cloak>
     
-    <!-- 音声有効化のためのトップバー -->
+    <!-- 音声有効化トップバー -->
     <div v-if="!audioStarted" @click="startAudio" class="bg-yellow-400 border-4 border-yellow-500 rounded-2xl p-3 mb-4 text-center cursor-pointer animate-pulse text-xs font-bold shadow-lg">
       🔊 <ruby>がめん<rt>画面</rt></ruby>をタップして <ruby>おと<rt>音</rt></ruby>を だそう！ (しゅっぱつしんこう！)
     </div>
 
-    <!-- ヘッダー（新幹線デザイン） -->
+    <!-- ヘッダー -->
     <header class="bg-gradient-to-r from-blue-600 via-sky-500 to-blue-500 rounded-3xl p-4 border-4 border-slate-800 text-white relative overflow-hidden custom-shadow mb-6">
       <div class="absolute -right-4 -bottom-6 opacity-15">
         <svg class="w-40 h-40" viewBox="0 0 100 100" fill="currentColor">
@@ -97,7 +95,7 @@
         </p>
       </div>
 
-      <!-- 進捗ゲージ (線路と走る新幹線) -->
+      <!-- 進捗ゲージ -->
       <div class="mt-4 bg-slate-900/40 rounded-xl p-2 relative border border-white/20">
         <div class="flex justify-between text-[9px] text-sky-200 mb-1">
           <span>🚉 しゅっぱつ駅 (7/18)</span>
@@ -107,9 +105,7 @@
           <div class="absolute inset-0 flex justify-between px-2 opacity-30">
             <div v-for="i in 15" :key="i" class="w-0.5 h-full bg-white"></div>
           </div>
-          <!-- 進捗バー -->
           <div class="absolute top-0 left-0 h-full bg-emerald-400 transition-all duration-500" :style="{ width: totalProgress + '%' }"></div>
-          <!-- 走るミニ新幹線 -->
           <div class="absolute top-0.5 -mt-0.5 transition-all duration-500" :style="{ left: `calc(${totalProgress}% - 24px)` }" :class="{'train-active': isRunning}">
             <svg class="w-8 h-6 text-yellow-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" viewBox="0 0 24 18" fill="currentColor">
               <path d="M2,12 L16,12 C20,12 23,10 23,7 L1,7 C1,10 1,12 2,12 Z" />
@@ -134,7 +130,7 @@
       </button>
       <button @click="currentTab = 'special'" :class="currentTab === 'special' ? 'bg-amber-500 text-white border-2 border-slate-800' : 'bg-white text-slate-600 border border-transparent'" class="py-2 rounded-xl font-bold text-[10px] transition-all flex flex-col items-center justify-center gap-0.5 shadow-sm relative">
         <span>とくべつ列車</span>
-        <span class="text-[8px] opacity-85">⚡ 日替わり運行</span>
+        <span class="text-[8px] opacity-85">⚡ 日替わり</span>
         <span v-if="!isSpecialCompleted(selectedDate)" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-ping"></span>
       </button>
       <button @click="currentTab = 'mission'" :class="currentTab === 'mission' ? 'bg-emerald-500 text-white border-2 border-slate-800' : 'bg-white text-slate-600 border border-transparent'" class="py-2 rounded-xl font-bold text-[10px] transition-all flex flex-col items-center justify-center gap-0.5 shadow-sm">
@@ -147,12 +143,12 @@
       </button>
     </div>
 
-    <!-- タブ1: まいにちのしゅくだい -->
-    <div v-show="currentTab === 'daily'" class="space-y-4">
+    <!-- タブ1: 毎日うんてん -->
+    <div v-show="currentTab === 'daily'" class="space-y-4 w-full">
       <!-- 路線図カレンダー -->
-      <div class="bg-white border-4 border-slate-800 rounded-3xl p-4 card-shadow">
+      <div class="bg-white border-4 border-slate-800 rounded-3xl p-4 card-shadow w-full">
         <h2 class="text-sm font-bold text-sky-600 flex items-center gap-1.5 mb-3">
-          🛤️ <ruby>うんてん路線<rt>うんてんろせん</rt></ruby> (カレンダー)
+          🛤️ <ruby>うんてん路线<rt>うんてんろせん</rt></ruby> (カレンダー)
         </h2>
         
         <div class="flex gap-3 overflow-x-auto pb-3 pt-1 scrollbar-thin scrollbar-thumb-sky-500">
@@ -164,24 +160,17 @@
                ]"
                class="flex-shrink-0 w-16 h-22 border-4 rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all relative">
             
-            <!-- クリア時の緑シグナル -->
             <div v-if="day.isCompleted" class="absolute -top-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5 border border-slate-800">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
             </div>
 
-            <!-- 日替わりの特別列車ヘッドマーク -->
+            <!-- 日替わり特別列車バッジ -->
             <div class="absolute -bottom-1 bg-yellow-400 text-slate-900 border border-slate-800 text-[6.5px] font-extrabold px-1 rounded-full scale-90 whitespace-nowrap shadow-sm">
               {{ getSpecialType(day.date) === 'jump' ? '🤸なわとび' : '🎹けんばん' }}
             </div>
 
-            <!-- 生活リズムカード運行日マーク -->
             <div v-if="isRhythmCardPeriod(day.date)" class="absolute -top-1 bg-purple-500 text-white border border-slate-800 text-[6px] font-bold px-1 rounded-full scale-75">
               ⏰リズム
-            </div>
-
-            <!-- 未来の日付ロックマーク -->
-            <div v-if="isFutureDate(day.date)" class="absolute top-0.5 right-0.5 text-[8px] opacity-70">
-              🔒
             </div>
 
             <span class="text-[10px] text-slate-400 font-bold">{{ formatMonth(day.date) }}</span>
@@ -195,25 +184,27 @@
       </div>
 
       <!-- 切符型チェックリスト -->
-      <div class="bg-amber-50 border-4 border-slate-800 rounded-3xl p-5 card-shadow relative overflow-hidden">
+      <div class="bg-amber-50 border-4 border-slate-800 rounded-3xl p-5 card-shadow relative overflow-hidden w-full">
         <div class="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-8 bg-sky-100 rounded-full border-r-4 border-slate-800"></div>
         <div class="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-8 bg-sky-100 rounded-full border-l-4 border-slate-800"></div>
 
-        <div class="flex justify-between items-center border-b-2 border-dashed border-amber-300 pb-3 mb-4">
+        <div class="flex justify-between items-center border-b-2 border-dashed border-amber-300 pb-3 mb-4 w-full">
           <span class="text-xs font-bold text-slate-500">🎫 とくべつ じょうしゃけん</span>
           <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300">
             {{ formatFullDate(selectedDate) }}
           </span>
         </div>
 
-        <!-- 未来の日付ロックアナウンス -->
-        <div v-if="isFutureDate(selectedDate)" class="bg-slate-800 text-yellow-300 rounded-2xl p-3 mb-4 text-center border-2 border-yellow-400 font-bold text-xs shadow-md">
-          🔒 あした以降の しゅくだいは、その日に なってから チェックしようね！
+        <!-- 未来の日付ロック表示 -->
+        <div v-if="isFutureDate(selectedDate)" class="bg-slate-800 text-yellow-300 rounded-2xl p-4 text-center mb-4 border-2 border-yellow-400 w-full">
+          <span class="text-3xl block mb-1">🔒 🛤️</span>
+          <h3 class="font-extrabold text-sm"><ruby>しゅくだい<rt>宿題</rt></ruby>は まだ 出発できません</h3>
+          <p class="text-[10px] text-yellow-200 mt-1">あしたに なってから チャレンジしよう！</p>
         </div>
 
-        <div class="space-y-4" :class="isFutureDate(selectedDate) ? 'opacity-50 pointer-events-none' : ''">
+        <div class="space-y-4 w-full" :class="isFutureDate(selectedDate) ? 'opacity-50 pointer-events-none' : ''">
           <!-- ① 生活リズムカード -->
-          <div v-if="isRhythmCardPeriod(selectedDate)" class="flex items-center justify-between bg-gradient-to-r from-purple-50 to-purple-100 p-3 rounded-2xl border-2 border-purple-800 cursor-pointer animate-fade-in" @click="toggleDaily('rhythmCard')">
+          <div v-if="isRhythmCardPeriod(selectedDate)" class="flex items-center justify-between bg-gradient-to-r from-purple-50 to-purple-100 p-3 rounded-2xl border-2 border-purple-800 cursor-pointer animate-fade-in w-full" @click="toggleDaily('rhythmCard')">
             <div class="flex items-center gap-3">
               <div class="text-2xl">⏰</div>
               <div>
@@ -221,27 +212,27 @@
                 <p class="text-[9px] text-purple-700">はやね・はやおきできたかな？</p>
               </div>
             </div>
-            <div class="w-8 h-8 rounded-full border-2 border-purple-850 flex items-center justify-center transition-all" :class="getDailyStatus('rhythmCard') ? 'bg-purple-600 border-purple-800 text-white' : 'bg-white'">
+            <div class="w-8 h-8 rounded-full border-2 border-purple-850 flex items-center justify-center transition-all flex-shrink-0" :class="getDailyStatus('rhythmCard') ? 'bg-purple-600 border-purple-800 text-white' : 'bg-white'">
               <span v-if="getDailyStatus('rhythmCard')" class="text-xs font-extrabold font-mono">済</span>
             </div>
           </div>
 
           <!-- ② サマースキル -->
-          <div class="flex items-center justify-between bg-white p-3 rounded-2xl border-2 border-slate-800 cursor-pointer" @click="toggleDaily('skill')">
+          <div class="flex items-center justify-between bg-white p-3 rounded-2xl border-2 border-slate-800 cursor-pointer w-full" @click="toggleDaily('skill')">
             <div class="flex items-center gap-3">
               <div class="text-2xl">📖</div>
               <div class="flex-1">
                 <h3 class="font-bold text-sm"><ruby>サマースキル<rt>さまーすきる</rt></ruby></h3>
-                <p class="text-[9px] text-slate-400">まいにち すこしずつ すすすもう！</p>
+                <p class="text-[9px] text-slate-400">まいにち すこしずつ すすめよう！</p>
               </div>
             </div>
-            <div class="w-8 h-8 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all" :class="getDailyStatus('skill') ? 'bg-emerald-500 border-emerald-600 text-white' : 'bg-slate-100'">
+            <div class="w-8 h-8 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all flex-shrink-0" :class="getDailyStatus('skill') ? 'bg-emerald-500 border-emerald-600 text-white' : 'bg-slate-100'">
               <span v-if="getDailyStatus('skill')" class="text-xs font-extrabold font-mono">済</span>
             </div>
           </div>
 
           <!-- ③ アサガオの水やり -->
-          <div class="flex items-center justify-between bg-white p-3 rounded-2xl border-2 border-slate-800 cursor-pointer" @click="toggleDaily('water')">
+          <div class="flex items-center justify-between bg-white p-3 rounded-2xl border-2 border-slate-800 cursor-pointer w-full" @click="toggleDaily('water')">
             <div class="flex items-center gap-3">
               <div class="text-2xl">🌺</div>
               <div>
@@ -249,13 +240,13 @@
                 <p class="text-[9px] text-slate-400"><ruby>はな<rt>花</rt></ruby>がさいたら カードにいろを ぬろう！</p>
               </div>
             </div>
-            <div class="w-8 h-8 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all" :class="getDailyStatus('water') ? 'bg-red-500 border-red-600 text-white' : 'bg-slate-100'">
+            <div class="w-8 h-8 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all flex-shrink-0" :class="getDailyStatus('water') ? 'bg-red-500 border-red-600 text-white' : 'bg-slate-100'">
               <span v-if="getDailyStatus('water')" class="text-xs font-extrabold font-mono">済</span>
             </div>
           </div>
 
           <!-- ④ 計算カード -->
-          <div class="flex items-center justify-between bg-white p-3 rounded-2xl border-2 border-slate-800 cursor-pointer" @click="toggleDaily('math')">
+          <div class="flex items-center justify-between bg-white p-3 rounded-2xl border-2 border-slate-800 cursor-pointer w-full" @click="toggleDaily('math')">
             <div class="flex items-center gap-3">
               <div class="text-2xl">🧮</div>
               <div>
@@ -263,13 +254,13 @@
                 <p class="text-[9px] text-slate-400">おうちのひとに きいてもらおう！</p>
               </div>
             </div>
-            <div class="w-8 h-8 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all" :class="getDailyStatus('math') ? 'bg-blue-500 border-blue-600 text-white' : 'bg-slate-100'">
+            <div class="w-8 h-8 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all flex-shrink-0" :class="getDailyStatus('math') ? 'bg-blue-500 border-blue-600 text-white' : 'bg-slate-100'">
               <span v-if="getDailyStatus('math')" class="text-xs font-extrabold font-mono">済</span>
             </div>
           </div>
 
           <!-- ⑤ いちぎょうにっき -->
-          <div class="flex items-center justify-between bg-white p-3 rounded-2xl border-2 border-slate-800 cursor-pointer" @click="toggleDaily('diary')">
+          <div class="flex items-center justify-between bg-white p-3 rounded-2xl border-2 border-slate-800 cursor-pointer w-full" @click="toggleDaily('diary')">
             <div class="flex items-center gap-3">
               <div class="text-2xl">📝</div>
               <div>
@@ -277,13 +268,13 @@
                 <p class="text-[9px] text-slate-400">きょうの おもいでを 1ぎょうかこう！</p>
               </div>
             </div>
-            <div class="w-8 h-8 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all" :class="getDailyStatus('diary') ? 'bg-orange-500 border-orange-600 text-white' : 'bg-slate-100'">
+            <div class="w-8 h-8 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all flex-shrink-0" :class="getDailyStatus('diary') ? 'bg-orange-500 border-orange-600 text-white' : 'bg-slate-100'">
               <span v-if="getDailyStatus('diary')" class="text-xs font-extrabold font-mono">済</span>
             </div>
           </div>
 
           <!-- ⑥ タブレット -->
-          <div class="flex items-center justify-between bg-white p-3 rounded-2xl border-2 border-slate-800 cursor-pointer" @click="toggleDaily('tablet')">
+          <div class="flex items-center justify-between bg-white p-3 rounded-2xl border-2 border-slate-800 cursor-pointer w-full" @click="toggleDaily('tablet')">
             <div class="flex items-center gap-3">
               <div class="text-2xl">💻</div>
               <div>
@@ -292,17 +283,17 @@
                 <p class="text-[9px] text-blue-600 font-bold">💡 じかんを きめてやりましょう！</p>
               </div>
             </div>
-            <div class="w-8 h-8 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all" :class="getDailyStatus('tablet') ? 'bg-indigo-500 border-indigo-600 text-white' : 'bg-slate-100'">
+            <div class="w-8 h-8 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all flex-shrink-0" :class="getDailyStatus('tablet') ? 'bg-indigo-500 border-indigo-600 text-white' : 'bg-slate-100'">
               <span v-if="getDailyStatus('tablet')" class="text-xs font-extrabold font-mono">済</span>
             </div>
           </div>
         </div>
 
-        <!-- すべてクリア時の発車ボタン -->
-        <div class="mt-6 text-center">
+        <!-- 発車ボタン -->
+        <div class="mt-6 text-center w-full">
           <button @click="departTrain" 
-                  :disabled="!isDailyAllCompleted"
-                  :class="isDailyAllCompleted ? 'bg-gradient-to-r from-red-500 to-amber-500 text-white animate-pulse shadow-lg ring-4 ring-yellow-300' : 'bg-slate-300 text-slate-500 cursor-not-allowed'"
+                  :disabled="!isDailyAllCompleted || isFutureDate(selectedDate)"
+                  :class="(isDailyAllCompleted && !isFutureDate(selectedDate)) ? 'bg-gradient-to-r from-red-500 to-amber-500 text-white animate-pulse shadow-lg ring-4 ring-yellow-300' : 'bg-slate-300 text-slate-500 cursor-not-allowed'"
                   class="w-full py-4 rounded-2xl font-extrabold text-lg border-4 border-slate-800 btn-shadow flex items-center justify-center gap-2 transition-all">
             <span>🚄</span>
             <span>{{ isDailyAllCompleted ? 'しゅっぱつ しんこう！！' : 'ぜんぶクリアで はっしゃ！' }}</span>
@@ -311,11 +302,10 @@
       </div>
     </div>
 
-    <!-- タブ2: とくべつれっしゃ（日替わりで交互に出動！） -->
-    <div v-show="currentTab === 'special'" class="space-y-4">
-      <div class="bg-gradient-to-b from-amber-50 to-orange-50 border-4 border-slate-800 rounded-3xl p-5 card-shadow">
-        <!-- とくべつ列車 ダイヤ -->
-        <div class="flex justify-between items-center border-b-2 border-dashed border-orange-300 pb-3 mb-4">
+    <!-- タブ2: とくべつれっしゃ -->
+    <div v-show="currentTab === 'special'" class="space-y-4 w-full">
+      <div class="bg-gradient-to-b from-amber-50 to-orange-50 border-4 border-slate-800 rounded-3xl p-5 card-shadow w-full">
+        <div class="flex justify-between items-center border-b-2 border-dashed border-orange-300 pb-3 mb-4 w-full">
           <span class="text-xs font-bold text-slate-500">⚡ とくべつ れっしゃ ダイヤ</span>
           <span class="text-xs font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full border border-orange-300">
             日替わりで交互に運行中！
@@ -323,23 +313,21 @@
         </div>
 
         <!-- 未来の日付ロックステータス -->
-        <div v-if="isFutureDate(selectedDate)" class="bg-slate-800 text-yellow-300 rounded-2xl p-4 text-center mb-6 border-2 border-yellow-400">
+        <div v-if="isFutureDate(selectedDate)" class="bg-slate-800 text-yellow-300 rounded-2xl p-4 text-center mb-6 border-2 border-yellow-400 w-full">
           <span class="text-3xl block mb-1">🔒 🛤️</span>
           <h3 class="font-extrabold text-sm"><ruby>とくべつ列車<rt>れっしゃ</rt></ruby>は まだ 出発できません</h3>
           <p class="text-[10px] text-yellow-200 mt-1">その日に なってから チャレンジしよう！</p>
         </div>
 
-        <!-- なわとび列車 運行中！ -->
-        <div v-else-if="getSpecialType(selectedDate) === 'jump'" class="space-y-4">
-          <div class="bg-yellow-100 border-4 border-yellow-400 rounded-2xl p-4 text-center">
+        <!-- なわとび号 -->
+        <div v-else-if="getSpecialType(selectedDate) === 'jump'" class="space-y-4 w-full">
+          <div class="bg-yellow-100 border-4 border-yellow-400 rounded-2xl p-4 text-center w-full">
             <span class="text-4xl block mb-1">🤸 💨</span>
             <h3 class="font-extrabold text-sm text-yellow-900"><ruby>なわとび号<rt>ごう</rt></ruby> 運行中！</h3>
-            <p class="text-[10px] text-yellow-700 mt-1">
-              今日はなわとびチャレンジの日！元気いっぱい体を動かそう！
-            </p>
+            <p class="text-[10px] text-yellow-700 mt-1">今日はなわとびチャレンジの日！元気いっぱい体を動かそう！</p>
           </div>
 
-          <div class="flex items-center justify-between bg-white p-4 rounded-2xl border-2 border-slate-800 cursor-pointer hover:bg-slate-50" @click="toggleSpecial('jump')">
+          <div class="flex items-center justify-between bg-white p-4 rounded-2xl border-2 border-slate-800 cursor-pointer hover:bg-slate-50 w-full" @click="toggleSpecial('jump')">
             <div class="flex items-center gap-3">
               <div class="text-3xl">🤸</div>
               <div>
@@ -350,55 +338,53 @@
                 </span>
               </div>
             </div>
-            <div class="w-12 h-12 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all" :class="getSpecialStatus('jump') ? 'bg-orange-500 border-orange-600 text-white' : 'bg-slate-100'">
+            <div class="w-12 h-12 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all flex-shrink-0" :class="getSpecialStatus('jump') ? 'bg-orange-500 border-orange-600 text-white' : 'bg-slate-100'">
               <span v-if="getSpecialStatus('jump')" class="text-xs font-extrabold font-mono">OK!</span>
             </div>
           </div>
         </div>
 
-        <!-- けんばんハーモニカ列車 運行中！ -->
-        <div v-else-if="getSpecialType(selectedDate) === 'keyboard'" class="space-y-4">
-          <div class="bg-blue-100 border-4 border-blue-400 rounded-2xl p-4 text-center">
+        <!-- けんばん号 -->
+        <div v-else-if="getSpecialType(selectedDate) === 'keyboard'" class="space-y-4 w-full">
+          <div class="bg-blue-100 border-4 border-blue-400 rounded-2xl p-4 text-center w-full">
             <span class="text-4xl block mb-1">🎹 🎶</span>
             <h3 class="font-extrabold text-sm text-blue-900"><ruby>けんばん号<rt>ごう</rt></ruby> 運行中！</h3>
-            <p class="text-[10px] text-blue-700 mt-1">
-              今日は鍵盤ハーモニカの日！きれいに音を出してみよう！
-            </p>
+            <p class="text-[10px] text-blue-700 mt-1">今日は鍵盤ハーモニカの日！きれいに音を出してみよう！</p>
           </div>
 
-          <div class="flex items-center justify-between bg-white p-4 rounded-2xl border-2 border-slate-800 cursor-pointer hover:bg-slate-50" @click="toggleSpecial('keyboard')">
+          <div class="flex items-center justify-between bg-white p-4 rounded-2xl border-2 border-slate-800 cursor-pointer hover:bg-slate-50 w-full" @click="toggleSpecial('keyboard')">
             <div class="flex items-center gap-3">
               <div class="text-3xl">🎹</div>
               <div>
                 <h3 class="font-extrabold text-sm"><ruby>鍵盤ハーモニカ<rt>けんばん</rt></ruby> れんしゅう</h3>
                 <p class="text-[9px] text-slate-400">「ミッキーマウスマーチ」をふいてみよう！</p>
-                <span class="inline-block bg-blue-100 text-blue-750 border border-blue-300 text-[8px] font-bold px-1.5 py-0.5 rounded-md mt-1">
+                <span class="inline-block bg-blue-100 text-blue-700 border border-blue-300 text-[8px] font-bold px-1.5 py-0.5 rounded-md mt-1">
                   🎁 3マイルもらえる！
                 </span>
               </div>
             </div>
-            <div class="w-12 h-12 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all" :class="getSpecialStatus('keyboard') ? 'bg-blue-500 border-blue-600 text-white' : 'bg-slate-100'">
+            <div class="w-12 h-12 rounded-full border-2 border-slate-800 flex items-center justify-center transition-all flex-shrink-0" :class="getSpecialStatus('keyboard') ? 'bg-blue-500 border-blue-600 text-white' : 'bg-slate-100'">
               <span v-if="getSpecialStatus('keyboard')" class="text-xs font-extrabold font-mono">OK!</span>
             </div>
           </div>
         </div>
 
-        <div class="mt-6 text-center text-[10px] text-orange-700 font-bold bg-orange-100 p-2.5 rounded-xl border border-orange-200">
-          ⭐ なわとびと鍵盤は1日おきに交互にやってくるよ！毎日コンプリートを目指して頑張ろう！
+        <div class="mt-6 text-center text-[10px] text-orange-700 font-bold bg-orange-100 p-2.5 rounded-xl border border-orange-200 w-full">
+          ⭐ なわとびと鍵盤は1日おきに交互にやってくるよ！
         </div>
       </div>
     </div>
 
-    <!-- タブ3: とくべつミッション (期間全体の宿題) -->
-    <div v-show="currentTab === 'mission'" class="space-y-4">
-      <div class="bg-emerald-50 border-4 border-slate-800 rounded-3xl p-5 card-shadow">
+    <!-- タブ3: 宿題スタンプ -->
+    <div v-show="currentTab === 'mission'" class="space-y-4 w-full">
+      <div class="bg-emerald-50 border-4 border-slate-800 rounded-3xl p-5 card-shadow w-full">
         <h2 class="text-md font-bold text-emerald-800 flex items-center gap-1.5 mb-4">
           スタンプラリー <ruby>駅一覧<rt>えきいちらん</rt></ruby> (期間中にやること)
         </h2>
 
-        <div class="space-y-4">
-          <!-- ① えにっき (2枚) -->
-          <div class="bg-white p-4 rounded-2xl border-2 border-slate-800">
+        <div class="space-y-4 w-full">
+          <!-- えにっき -->
+          <div class="bg-white p-4 rounded-2xl border-2 border-slate-800 w-full">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="text-xl">🎨</span>
@@ -416,8 +402,8 @@
             </div>
           </div>
 
-          <!-- ② 鍵盤ハーモニカの提出動画 (3回) -->
-          <div class="bg-white p-4 rounded-2xl border-2 border-slate-800">
+          <!-- 鍵盤提出動画 -->
+          <div class="bg-white p-4 rounded-2xl border-2 border-slate-800 w-full">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="text-xl">🎥</span>
@@ -443,8 +429,8 @@
             </div>
           </div>
 
-          <!-- ③ 読書通帳 (冊数) -->
-          <div class="bg-white p-4 rounded-2xl border-2 border-slate-800">
+          <!-- 読書通帳 -->
+          <div class="bg-white p-4 rounded-2xl border-2 border-slate-800 w-full">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="text-xl">📚</span>
@@ -459,8 +445,8 @@
             <p class="text-[9px] text-slate-500 mt-1">本を読んだら、読書通帳にどんどん貯めよう！</p>
           </div>
 
-          <!-- ④ 作品募集 (2点以上) -->
-          <div class="bg-white p-4 rounded-2xl border-2 border-slate-800">
+          <!-- 作品募集 -->
+          <div class="bg-white p-4 rounded-2xl border-2 border-slate-800 w-full">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="text-xl">✂️</span>
@@ -478,10 +464,10 @@
       </div>
     </div>
 
-    <!-- タブ4: しぎょうしきのじゅんび -->
-    <div v-show="currentTab === 'baggage'" class="space-y-4">
-      <div class="bg-purple-50 border-4 border-slate-800 rounded-3xl p-5 card-shadow">
-        <div class="flex items-center justify-between border-b-2 border-purple-200 pb-3 mb-4">
+    <!-- タブ4: しぎょうしき -->
+    <div v-show="currentTab === 'baggage'" class="space-y-4 w-full">
+      <div class="bg-purple-50 border-4 border-slate-800 rounded-3xl p-5 card-shadow w-full">
+        <div class="flex items-center justify-between border-b-2 border-purple-200 pb-3 mb-4 w-full">
           <h2 class="text-md font-bold text-purple-800 flex items-center gap-1.5">
             🎒 しぎょうしきの もちもの
           </h2>
@@ -490,11 +476,11 @@
           </span>
         </div>
 
-        <p class="text-[10px] text-purple-700 font-bold mb-4 bg-purple-100 p-2 rounded-xl border border-purple-200">
+        <p class="text-[10px] text-purple-700 font-bold mb-4 bg-purple-100 p-2 rounded-xl border border-purple-200 w-full">
           ⚠️ しんかんせんに おくりものを つみこおう！チェックすると にもつが のるよ！
         </p>
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-2 gap-3 w-full">
           <div v-for="(item, index) in luggage" :key="index" 
                @click="toggleLuggage(index)"
                :class="item.checked ? 'bg-purple-200 border-purple-500' : 'bg-white border-slate-300'"
@@ -511,10 +497,10 @@
     </div>
 
     <!-- でんしゃがちゃ -->
-    <section class="mt-8 bg-gradient-to-br from-yellow-300 to-amber-400 border-4 border-slate-800 rounded-3xl p-5 card-shadow relative overflow-hidden">
+    <section class="mt-8 bg-gradient-to-br from-yellow-300 to-amber-400 border-4 border-slate-800 rounded-3xl p-5 card-shadow relative overflow-hidden w-full">
       <div class="absolute inset-0 bg-white/10 shine-effect pointer-events-none"></div>
 
-      <div class="flex justify-between items-center mb-3">
+      <div class="flex justify-between items-center mb-3 w-full">
         <h2 class="text-md font-extrabold text-slate-800 flex items-center gap-1.5">
           🎁 しんかんせん ガチャ
         </h2>
@@ -527,7 +513,7 @@
         しゅくだいをクリアすると「マイル」がもらえるよ！ <strong>10マイル</strong> でガチャが1回まわせる！
       </p>
 
-      <div class="flex gap-4 items-center">
+      <div class="flex gap-4 items-center w-full">
         <button @click="spinGacha" 
                 :disabled="points < 10"
                 :class="points >= 10 ? 'bg-red-500 hover:bg-red-600 text-white animate-bounce' : 'bg-slate-300 text-slate-500 cursor-not-allowed'"
@@ -547,16 +533,15 @@
 
       <!-- ガチャの当たり演出ポップアップ -->
       <div v-if="gachaResult" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-6">
-        <div class="bg-white border-4 border-slate-800 rounded-3xl p-6 text-center max-w-sm w-full relative animate-bounce-short">
+        <div class="bg-white border-4 border-slate-800 rounded-3xl p-6 text-center max-w-sm w-full relative">
           <div class="text-yellow-400 text-4xl mb-2">✨ ✨ ✨</div>
           <h3 class="text-lg font-extrabold text-slate-900 mb-1">
             あたらしい しんかんせん！
           </h3>
-          <div class="my-4 p-4 bg-slate-100 rounded-2xl border-2 border-dashed border-slate-400 flex flex-col items-center overflow-hidden">
-            <!-- リアルな本物風SVG新幹線イメージ -->
-            <div class="w-full max-w-[240px] mb-4 bg-slate-800 rounded-xl p-3 border border-slate-700 shadow-inner" v-html="gachaResult.svg"></div>
-            <span class="font-extrabold text-lg text-slate-800">{{ gachaResult.name }}</span>
-            <span class="text-xs bg-sky-100 text-sky-700 font-bold px-3 py-1 rounded-full border border-sky-300 mt-2">
+          <div class="my-4 p-4 bg-slate-800 rounded-2xl border-2 border-slate-600 flex flex-col items-center">
+            <div class="w-48 h-20 mb-2 flex items-center justify-center" v-html="gachaResult.svg"></div>
+            <span class="font-extrabold text-lg text-white mt-1">{{ gachaResult.name }}</span>
+            <span class="text-xs bg-sky-100 text-sky-800 font-bold px-3 py-1 rounded-full border border-sky-300 mt-2">
               {{ gachaResult.desc }}
             </span>
           </div>
@@ -567,52 +552,73 @@
       </div>
     </section>
 
-    <!-- でんしゃずかん -->
-    <section class="mt-6 bg-white border-4 border-slate-800 rounded-3xl p-5 card-shadow">
-      <h2 class="text-md font-bold text-slate-800 flex items-center gap-1.5 mb-4">
+    <!-- でんしゃ・しんかんせん図鑑 -->
+    <section class="mt-6 bg-white border-4 border-slate-800 rounded-3xl p-5 card-shadow w-full">
+      <h2 class="text-md font-bold text-slate-800 flex items-center gap-1.5 mb-1">
         📖 でんしゃ・しんかんせん図鑑
       </h2>
-      <div class="grid grid-cols-2 gap-3">
+      <p class="text-[9px] text-slate-500 mb-4">タップすると「はっしゃの電車」をえらべるよ！</p>
+
+      <div class="grid grid-cols-2 gap-3 w-full">
         <div v-for="train in trainList" :key="train.id" 
-             :class="isUnlocked(train.id) ? 'bg-sky-50 border-sky-400' : 'bg-slate-100 border-slate-300 grayscale opacity-40'"
-             class="border-2 p-3 rounded-2xl flex flex-col items-center justify-center relative overflow-hidden">
+             @click="isUnlocked(train.id) && selectTrain(train.id)"
+             :class="[
+               isUnlocked(train.id) ? 'bg-slate-800 border-slate-700 cursor-pointer' : 'bg-slate-200 border-slate-300 opacity-50',
+               selectedTrainId === train.id ? 'ring-4 ring-yellow-400 border-yellow-400 bg-slate-900 scale-[1.02]' : ''
+             ]"
+             class="border-2 p-2 rounded-2xl flex flex-col items-center justify-center relative transition-all overflow-hidden min-h-[110px]">
           
-          <!-- 図鑑用ミニ本物風SVG -->
-          <div class="w-full h-16 flex items-center justify-center bg-slate-800/90 rounded-lg p-1.5 mb-2" v-html="train.svg"></div>
-          
-          <span class="text-[10px] font-extrabold text-slate-800 text-center line-clamp-1">
-            {{ isUnlocked(train.id) ? train.name : '???（ロック中）' }}
+          <div v-if="isUnlocked(train.id)" class="w-full h-14 flex items-center justify-center" v-html="train.svg"></div>
+          <div v-else class="w-full h-14 flex items-center justify-center text-slate-400 text-2xl">🔒</div>
+
+          <span class="text-[10px] font-extrabold text-white text-center mt-1">
+            {{ isUnlocked(train.id) ? train.name : '??? (ロック中)' }}
           </span>
-          <div v-if="!isUnlocked(train.id)" class="absolute inset-0 flex items-center justify-center bg-slate-900/45 rounded-2xl font-bold text-white text-sm">
-            🔒 ロック中
+
+          <div v-if="selectedTrainId === train.id && isUnlocked(train.id)" class="absolute top-1 right-1 bg-yellow-400 text-slate-900 text-[8px] font-black px-1.5 py-0.5 rounded-full border border-slate-900">
+            ★ はっしゃの電車！
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 発車セレブレーションアニメーションオーバーレイ -->
-    <div v-if="showCelebration" class="fixed inset-0 bg-sky-900/90 z-50 flex flex-col items-center justify-center overflow-hidden">
-      <!-- キラキラ紙吹雪 Canvas -->
-      <canvas id="confetti-canvas" class="absolute inset-0 pointer-events-none w-full h-full"></canvas>
+    <!-- モーダル①: 「しゅっぱつしんこう！！」電車発車モーダル（ボーナス表示なし） -->
+    <div v-if="showDepartureModal" class="fixed inset-0 bg-slate-900/90 z-50 flex flex-col items-center justify-center p-4 overflow-hidden">
+      <div class="relative z-20 text-center w-full max-w-sm">
+        <div class="text-yellow-400 font-extrabold text-2xl mb-1 animate-bounce">
+          🚄 しゅっぱつ しんこう！！
+        </div>
+        <p class="text-white text-xs mb-4 font-bold">ぜんぶクリア！しんかんせんが はっしゃするよ！</p>
+        
+        <!-- 中央で一旦停止してじっくり見せてから駆け抜けるアニメーション -->
+        <div class="w-full h-32 my-4 relative flex items-center justify-center overflow-hidden">
+          <div class="absolute inset-x-0 bottom-2 h-1 bg-slate-600"></div>
+          <div class="animate-train-run-pause w-64 h-24 flex items-center justify-center drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)]" v-html="currentDepartTrainSvg"></div>
+        </div>
+
+        <button @click="closeDepartureModal" class="mt-4 bg-yellow-400 text-slate-900 font-extrabold text-sm py-3 px-8 rounded-full border-4 border-slate-900 shadow-lg active:scale-95 transition-all">
+          閉じる
+        </button>
+      </div>
+    </div>
+
+    <!-- モーダル②: 「きょうのしゅくだい ぜんぶクリア！」ボーナス3マイルポップアップ -->
+    <div v-if="showBonusModal" class="fixed inset-0 bg-slate-900/90 z-50 flex flex-col items-center justify-center p-4 overflow-hidden">
+      <canvas id="confetti-canvas" class="absolute inset-0 pointer-events-none z-10"></canvas>
       
-      <div class="text-center relative z-10 p-6">
-        <div class="text-yellow-300 text-4xl font-extrabold mb-2 animate-bounce">
-          しゅっぱつ しんこう！！！
+      <div class="relative z-20 text-center w-full max-w-sm bg-white border-4 border-slate-800 rounded-3xl p-6 shadow-2xl">
+        <div class="text-yellow-500 font-extrabold text-xl mb-1 animate-bounce">
+          ✨ きょうの しゅくだい ぜんぶクリア！ ✨
         </div>
-        <div class="text-white text-lg font-bold mb-12">
-          きょうの しゅくだい ぜんぶクリア！ 🏆
+        <div class="text-amber-600 font-extrabold text-lg mb-3 bg-yellow-100 border-2 border-yellow-300 p-2 rounded-2xl">
+          🎁 ボーナス 3マイル プレゼント！
         </div>
-
-        <!-- 走る巨大リアルSVG新幹線 (キーフレームに沿って左から右へ！) -->
-        <div class="absolute top-1/2 left-0 w-full flex justify-center transform -translate-y-1/2 pointer-events-none">
-          <div class="w-72 h-32 bg-slate-800 p-4 rounded-3xl border-4 border-yellow-400 shadow-2xl fly-by-train flex flex-col justify-center items-center">
-            <div class="w-full" v-html="currentDepartTrainSvg"></div>
-            <div class="text-yellow-300 font-extrabold text-sm mt-2 tracking-wider">超特急 はっしゃ！</div>
-          </div>
-        </div>
-
-        <button @click="closeCelebration" class="mt-48 px-8 py-3 bg-red-500 border-4 border-white text-white font-extrabold text-md rounded-2xl shadow-lg hover:bg-red-600 transition-all">
-          もどる 🚉
+        <p class="text-slate-700 text-xs mb-4 font-bold">
+          「毎日うんてん」と「とくべつ列車」を ぜんぶクリアしたよ！すごーい！
+        </p>
+        
+        <button @click="closeBonusModal" class="mt-2 bg-gradient-to-r from-red-500 to-amber-500 text-white font-extrabold text-sm py-3 px-8 rounded-full border-4 border-slate-900 shadow-lg active:scale-95 transition-all">
+          やったー！ (閉じる)
         </button>
       </div>
     </div>
@@ -628,163 +634,23 @@
   <script>
     const { createApp, ref, computed, onMounted } = Vue;
 
-    // リアルなSVGモデリング新幹線 (すべて顔・ノーズが右「→」を向くように統一設計)
-    const svgHayabusa = `
-      <svg viewBox="0 0 120 40" class="w-full h-auto">
-        <!-- 背景のレール -->
-        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
-        <!-- はやぶさノーズ -->
-        <path d="M 10,24 Q 45,24 65,19 Q 95,14 115,31 Q 120,35 120,36 L 10,36 Z" fill="#ffffff" />
-        <path d="M 10,6 L 65,6 Q 80,6 90,11 Q 105,17 115,31 Q 95,14 65,19 Q 45,24 10,24 Z" fill="#008754" />
-        <!-- ピンクのライン -->
-        <path d="M 10,24 Q 45,24 65,19 Q 95,14 115,31" stroke="#e11d48" stroke-width="2" fill="none" />
-        <!-- 運転席の窓 -->
-        <path d="M 85,12 Q 90,12 94,15 L 82,18 Z" fill="#1e293b" />
-        <!-- 客車の窓 -->
-        <rect x="20" y="10" width="6" height="4" rx="1" fill="#1e293b" />
-        <rect x="32" y="10" width="6" height="4" rx="1" fill="#1e293b" />
-        <rect x="44" y="10" width="6" height="4" rx="1" fill="#1e293b" />
-      </svg>
-    `;
-
-    const svgKomachi = `
-      <svg viewBox="0 0 120 40" class="w-full h-auto">
-        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
-        <!-- こまちボディ -->
-        <path d="M 10,24 Q 45,24 65,20 Q 90,15 115,31 Q 120,35 120,36 L 10,36 Z" fill="#ffffff" />
-        <path d="M 10,6 L 65,6 Q 80,6 90,11 Q 105,17 115,31 Q 90,15 65,20 Q 45,24 10,24 Z" fill="#b81d24" />
-        <!-- グレーのステップライン -->
-        <path d="M 10,24 Q 45,24 65,20 Q 90,15 115,31" stroke="#4b5563" stroke-width="1.5" fill="none" />
-        <!-- 運転席の窓 -->
-        <path d="M 82,13 Q 88,13 92,16 L 80,18 Z" fill="#1e293b" />
-        <!-- 客窓 -->
-        <rect x="20" y="11" width="6" height="4" rx="1" fill="#1e293b" />
-        <rect x="32" y="11" width="6" height="4" rx="1" fill="#1e293b" />
-        <rect x="44" y="11" width="6" height="4" rx="1" fill="#1e293b" />
-      </svg>
-    `;
-
-    const svgDrYellow = `
-      <svg viewBox="0 0 120 40" class="w-full h-auto">
-        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
-        <!-- ドクターイエロー -->
-        <path d="M 10,6 L 60,6 Q 80,6 90,13 Q 105,20 115,32 Q 120,35 120,36 L 10,36 Z" fill="#eab308" />
-        <!-- ブルーのストライプ -->
-        <path d="M 10,24 Q 50,24 70,22 Q 90,18 110,32" stroke="#1d4ed8" stroke-width="3" fill="none" />
-        <!-- 運転席 -->
-        <path d="M 85,11 Q 91,11 94,15 L 83,17 Z" fill="#1e293b" />
-        <rect x="20" y="11" width="8" height="4" rx="1" fill="#1e293b" />
-        <rect x="35" y="11" width="8" height="4" rx="1" fill="#1e293b" />
-        <rect x="50" y="11" width="8" height="4" rx="1" fill="#1e293b" />
-      </svg>
-    `;
-
-    const svgKagayaki = `
-      <svg viewBox="0 0 120 40" class="w-full h-auto">
-        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
-        <!-- かがやきボディ -->
-        <path d="M 10,23 Q 45,23 65,19 Q 95,14 115,31 L 120,36 L 10,36 Z" fill="#f8fafc" />
-        <path d="M 10,6 L 65,6 Q 80,6 90,11 Q 105,17 115,31 Q 95,14 65,19 Q 45,23 10,23 Z" fill="#1e40af" />
-        <!-- 銅（ゴールド）のライン -->
-        <path d="M 10,23 Q 45,23 65,19 Q 95,14 115,31" stroke="#ca8a04" stroke-width="2.5" fill="none" />
-        <!-- 窓 -->
-        <path d="M 84,11 Q 89,11 93,14 L 81,17 Z" fill="#1e293b" />
-        <rect x="20" y="10" width="6" height="4" rx="1" fill="#1e293b" />
-        <rect x="32" y="10" width="6" height="4" rx="1" fill="#1e293b" />
-        <rect x="44" y="10" width="6" height="4" rx="1" fill="#1e293b" />
-      </svg>
-    `;
-
-    const svgNozomi = `
-      <svg viewBox="0 0 120 40" class="w-full h-auto">
-        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
-        <!-- のぞみN700S -->
-        <path d="M 10,6 L 65,6 Q 80,6 90,12 Q 105,18 115,32 Q 120,35 120,36 L 10,36 Z" fill="#f8fafc" />
-        <!-- 青のデュアルスプリームライン -->
-        <path d="M 10,24 Q 50,24 70,22 Q 90,18 112,32" stroke="#1d4ed8" stroke-width="2.5" fill="none" />
-        <path d="M 10,28 Q 50,28 70,26 Q 90,22 108,34" stroke="#1d4ed8" stroke-width="1" fill="none" />
-        <!-- 窓 -->
-        <path d="M 83,12 Q 88,12 92,15 L 81,17 Z" fill="#1e293b" />
-        <rect x="20" y="11" width="6" height="4" rx="1" fill="#1e293b" />
-        <rect x="32" y="11" width="6" height="4" rx="1" fill="#1e293b" />
-        <rect x="44" y="11" width="6" height="4" rx="1" fill="#1e293b" />
-      </svg>
-    `;
-
-    const svgShinkansen500 = `
-      <svg viewBox="0 0 120 40" class="w-full h-auto">
-        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
-        <!-- 戦闘機型500系新幹線 -->
-        <path d="M 10,8 L 65,8 Q 80,8 92,14 Q 106,20 116,33 Q 120,35 120,36 L 10,36 Z" fill="#cbd5e1" />
-        <!-- 鋭い青のウェーブライン -->
-        <path d="M 10,18 L 120,18" fill="#1e3a8a" opacity="0.3" />
-        <path d="M 10,24 Q 45,24 65,22 Q 90,18 115,32" stroke="#1d4ed8" stroke-width="3" fill="none" />
-        <!-- 特有のキャノピー（コクピット風窓） -->
-        <path d="M 85,13 Q 92,13 95,17 Q 85,19 82,18 Z" fill="#1e293b" />
-        <circle cx="25" cy="14" r="2.5" fill="#1e293b" />
-        <circle cx="37" cy="14" r="2.5" fill="#1e293b" />
-        <circle cx="49" cy="14" r="2.5" fill="#1e293b" />
-      </svg>
-    `;
-
-    const svgLinear = `
-      <svg viewBox="0 0 120 40" class="w-full h-auto">
-        <!-- 磁気浮上レール -->
-        <rect x="0" y="32" width="120" height="6" fill="#475569" />
-        <!-- 超流線型リニアL0系 -->
-        <path d="M 10,6 L 60,6 Q 80,6 95,11 Q 110,16 118,30 L 10,30 Z" fill="#ffffff" />
-        <!-- シャープなブルーのライン -->
-        <path d="M 10,18 Q 60,18 80,16 Q 100,13 115,25" stroke="#1e3a8a" stroke-width="3.5" fill="none" />
-        <!-- 窓 -->
-        <path d="M 94,10 L 100,12 L 95,13 Z" fill="#1e293b" />
-        <rect x="25" y="10" width="8" height="2" rx="0.5" fill="#1e293b" />
-        <rect x="40" y="10" width="8" height="2" rx="0.5" fill="#1e293b" />
-        <rect x="55" y="10" width="8" height="2" rx="0.5" fill="#1e293b" />
-      </svg>
-    `;
-
-    // 【修正】SLが常に進行方向（右向き）を向くように、グループ全体を水平反転(scaleX(-1))させて再定義！
-    const svgSl = `
-      <svg viewBox="0 0 120 40" class="w-full h-auto">
-        <!-- 線路 -->
-        <line x1="0" y1="36" x2="120" y2="36" stroke="#94a3b8" stroke-width="2" />
-        <!-- 右向きに走らせるため、120px幅のエリアで水平反転 -->
-        <g transform="translate(120, 0) scale(-1, 1)">
-          <!-- SLのメイン煙突・ボイラー -->
-          <rect x="15" y="10" width="60" height="20" rx="2" fill="#1e293b" />
-          <rect x="75" y="4" width="25" height="26" rx="2" fill="#0f172a" />
-          <!-- 煙突と除煙板 -->
-          <rect x="22" y="2" width="8" height="10" fill="#0f172a" />
-          <path d="M 12,10 L 15,10 L 15,26 L 12,26 Z" fill="#1e293b" />
-          <!-- キャブ（運転席）の窓 -->
-          <rect x="80" y="8" width="12" height="10" rx="1" fill="#fef08a" />
-          <!-- 金色の装飾パーツ -->
-          <circle cx="45" cy="10" r="4" fill="#ca8a04" />
-          <rect x="62" y="6" width="6" height="6" fill="#ca8a04" />
-          <!-- 赤い巨大動輪 -->
-          <circle cx="30" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
-          <circle cx="50" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
-          <circle cx="70" cy="30" r="8" fill="#ef4444" stroke="#000" stroke-width="1.5" />
-          <!-- 連結棒 -->
-          <line x1="30" y1="30" x2="70" y2="30" stroke="#f1f5f9" stroke-width="2" />
-          <!-- もくもく煙 -->
-          <circle cx="26" cy="-2" r="5" fill="#94a3b8" opacity="0.6" />
-          <circle cx="34" cy="-6" r="7" fill="#cbd5e1" opacity="0.4" />
-        </g>
-      </svg>
-    `;
-
     createApp({
       setup() {
         const audioStarted = ref(false);
         const currentTab = ref('daily');
-        const selectedDate = ref('');
+        const selectedDate = ref('2026-07-18');
         const isRunning = ref(false);
-        const showCelebration = ref(false); // 発車豪華イベントの表示フラグ
-        
+        const selectedTrainId = ref('hayabusa');
+
+        // モーダル表示フラグ（完全に分離）
+        const showDepartureModal = ref(false); // 発車用
+        const showBonusModal = ref(false);     // 全コンプリート3マイルボーナス用
+
         // 宿題データ
         const dailyLogs = ref({});
         const specialLogs = ref({}); 
+        const dailyBonusClaimed = ref({}); // 日ごとの全クリアボーナス(3マイル)獲得フラグ
+        
         const missions = ref({
           pictureDiary: 0,
           keyboardHarmonica: 0,
@@ -805,23 +671,116 @@
         ]);
 
         const points = ref(0);
-        const collectedTrains = ref([]);
+        const collectedTrains = ref(['hayabusa']);
         const gachaResult = ref(null);
 
-        // 電車図鑑リスト（絵文字から超リアルなSVGへアップグレード！）
+        // 車体後部が平らなリアルSVGイラスト群
         const trainList = [
-          { id: 'hayabusa', name: 'E5系 はやぶさ', desc: '日本でいちばん速い新幹線！', svg: svgHayabusa },
-          { id: 'komachi', name: 'E6系 こまち', desc: '秋田にいく、真っ刻でカッコいい新幹線！', svg: svgKomachi },
-          { id: 'dr_yellow', name: 'ドクターイエロー', desc: '見ると幸せになれる、線路を点検する新幹線！', svg: svgDrYellow },
-          { id: 'kagayaki', name: 'E7系 かがやき', desc: '金沢にいく、青と金色のリッチな新幹線！', svg: svgKagayaki },
-          { id: 'nozomi', name: 'N700S のぞみ', desc: '東海道をビューンと走る最新ののぞみ！', svg: svgNozomi },
-          { id: 'shinkansen_500', name: '500系 新幹線', desc: '戦闘機みたいなデザインの超クールな新幹線！', svg: svgShinkansen500 },
-          { id: 'linear', name: 'L0系 リニア', desc: '磁石で浮いて時速500キロで走る未来の電車！', svg: svgLinear },
-          { id: 'sl', name: 'SLやまぐち号', desc: '煙をはくロマンあふれる蒸気機関車！', svg: svgSl }
+          { 
+            id: 'hayabusa', name: 'E5系 はやぶさ', desc: '最高時速320kmのグリーン超特急！',
+            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow">
+                    <path d="M5,12 L110,12 C135,12 155,26 158,38 L158,40 L5,40 Z" fill="#00a86b"/>
+                    <path d="M5,40 L158,40 L158,42 L5,42 Z" fill="#e91e63"/>
+                    <path d="M5,42 L158,42 L158,46 L5,46 Z" fill="#ffffff"/>
+                    <rect x="25" y="18" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <rect x="42" y="18" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <rect x="59" y="18" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <rect x="76" y="18" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <path d="M120,20 Q138,22 145,30 L118,30 Z" fill="#0f172a"/>
+                  </svg>`
+          },
+          { 
+            id: 'komachi', name: 'E6系 こまち', desc: '茜色に輝くミニ新幹線！',
+            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow">
+                    <path d="M5,12 L105,12 C130,12 155,25 158,38 L158,40 L5,40 Z" fill="#dc2626"/>
+                    <path d="M5,28 L158,28 L158,46 L5,46 Z" fill="#ffffff"/>
+                    <path d="M5,26 L158,26 L158,28 L5,28 Z" fill="#475569"/>
+                    <rect x="25" y="32" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <rect x="42" y="32" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <rect x="59" y="32" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <path d="M120,20 Q138,22 145,28 L118,28 Z" fill="#0f172a"/>
+                  </svg>`
+          },
+          { 
+            id: 'dr_yellow', name: 'ドクターイエロー', desc: '見ると幸せになれる黄色の新幹線！',
+            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow">
+                    <path d="M5,12 L115,12 C135,12 152,24 158,38 L158,46 L5,46 Z" fill="#facc15"/>
+                    <path d="M5,28 L158,28 L158,34 L5,34 Z" fill="#1e40af"/>
+                    <rect x="25" y="18" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <rect x="42" y="18" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <rect x="59" y="18" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <path d="M122,18 Q138,20 144,27 L120,27 Z" fill="#0f172a"/>
+                  </svg>`
+          },
+          { 
+            id: 'kagayaki', name: 'E7系 かがやき', desc: '青とゴールドの絢欄豪華な新幹線！',
+            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow">
+                    <path d="M5,12 L115,12 C135,12 152,24 158,38 L158,46 L5,46 Z" fill="#ffffff"/>
+                    <path d="M5,12 L110,12 C130,12 145,22 150,28 L5,28 Z" fill="#0284c7"/>
+                    <path d="M5,28 L152,28 L154,32 L5,32 Z" fill="#d97706"/>
+                    <rect x="25" y="34" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <rect x="42" y="34" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <rect x="59" y="34" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <path d="M122,18 Q138,20 144,26 L120,26 Z" fill="#0f172a"/>
+                  </svg>`
+          },
+          { 
+            id: 'nozomi', name: 'N700S のぞみ', desc: '日本の大動脈を走る最新のエース！',
+            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow">
+                    <path d="M5,12 L115,12 C135,12 152,24 158,38 L158,46 L5,46 Z" fill="#f8fafc"/>
+                    <path d="M5,28 L158,28 L158,32 L5,32 Z" fill="#1d4ed8"/>
+                    <path d="M5,35 L158,35 L158,37 L5,37 Z" fill="#1d4ed8"/>
+                    <rect x="25" y="18" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <rect x="42" y="18" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <rect x="59" y="18" width="10" height="6" rx="1" fill="#1e293b"/>
+                    <path d="M122,18 Q138,20 144,27 L120,27 Z" fill="#0f172a"/>
+                  </svg>`
+          },
+          { 
+            id: 'shinkansen_500', name: '500系 新幹線', desc: 'ジェット機みたいな超ロングノーズ！',
+            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow">
+                    <path d="M5,14 L90,14 C120,14 148,26 158,38 L158,46 L5,46 Z" fill="#64748b"/>
+                    <path d="M5,26 L158,26 L158,32 L5,32 Z" fill="#2563eb"/>
+                    <path d="M5,32 L158,32 L158,46 L5,46 Z" fill="#94a3b8"/>
+                    <circle cx="30" cy="20" r="3" fill="#1e293b"/>
+                    <circle cx="48" cy="20" r="3" fill="#1e293b"/>
+                    <circle cx="66" cy="20" r="3" fill="#1e293b"/>
+                    <path d="M110,18 Q135,22 142,28 L108,28 Z" fill="#0f172a"/>
+                  </svg>`
+          },
+          { 
+            id: 'linear', name: 'L0系 リニア', desc: '時速500kmで宙に浮く未来の超特急！',
+            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow">
+                    <path d="M5,16 L100,16 C128,16 152,26 158,38 L158,44 L5,44 Z" fill="#ffffff"/>
+                    <path d="M5,26 L158,26 L158,30 L5,30 Z" fill="#1d4ed8"/>
+                    <path d="M5,38 L158,38 L158,40 L5,40 Z" fill="#1d4ed8"/>
+                    <rect x="25" y="20" width="12" height="4" rx="1" fill="#334155"/>
+                    <rect x="45" y="20" width="12" height="4" rx="1" fill="#334155"/>
+                    <rect x="65" y="20" width="12" height="4" rx="1" fill="#334155"/>
+                    <path d="M118,20 Q138,22 145,28 L116,28 Z" fill="#0f172a"/>
+                  </svg>`
+          },
+          { 
+            id: 'sl', name: 'SLやまぐち号', desc: 'モクモク煙を吹いて走る黒鉄の機関車！',
+            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow">
+                    <rect x="5" y="15" width="55" height="30" fill="#0f172a" rx="2"/>
+                    <rect x="15" y="20" width="16" height="12" fill="#fef08a" rx="1"/>
+                    <rect x="38" y="20" width="16" height="12" fill="#fef08a" rx="1"/>
+                    <rect x="60" y="22" width="75" height="23" fill="#1e293b" rx="2"/>
+                    <rect x="115" y="10" width="12" height="14" fill="#0f172a"/>
+                    <circle cx="125" cy="6" r="5" fill="#cbd5e1" opacity="0.8"/>
+                    <circle cx="135" cy="4" r="7" fill="#cbd5e1" opacity="0.6"/>
+                    <circle cx="30" cy="42" r="7" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>
+                    <circle cx="75" cy="42" r="7" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>
+                    <circle cx="95" cy="42" r="7" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>
+                    <circle cx="115" cy="42" r="7" fill="#dc2626" stroke="#ffffff" stroke-width="2"/>
+                  </svg>`
+          }
         ];
 
         const totalTrainCards = trainList.length;
 
+        // 音声機能
         let audioCtx = null;
         
         const initAudio = () => {
@@ -857,18 +816,14 @@
         const playStampSound = () => {
           if (!audioCtx) return;
           playBeep(800, 0.05, 'triangle');
-          setTimeout(() => {
-            playBeep(1200, 0.08, 'sine');
-          }, 40);
+          setTimeout(() => { playBeep(1200, 0.08, 'sine'); }, 40);
         };
 
         const playFanfare = () => {
           if (!audioCtx) return;
           const notes = [523.25, 659.25, 783.99, 1046.50];
           notes.forEach((freq, index) => {
-            setTimeout(() => {
-              playBeep(freq, 0.15, 'sine');
-            }, index * 100);
+            setTimeout(() => { playBeep(freq, 0.15, 'sine'); }, index * 100);
           });
         };
 
@@ -909,14 +864,11 @@
           for (let i = 0; i < 4; i++) {
             setTimeout(() => {
               playBeep(120, 0.05, 'triangle');
-              setTimeout(() => {
-                playBeep(90, 0.05, 'triangle');
-              }, 60);
+              setTimeout(() => { playBeep(90, 0.05, 'triangle'); }, 60);
             }, i * 300);
           }
         };
 
-        // 夏休みの全日程作成（7月18日〜8月27日）
         const generateSummerDays = () => {
           const days = [];
           const startDate = new Date(2026, 6, 18);
@@ -927,65 +879,40 @@
             const mm = String(d.getMonth() + 1).padStart(2, '0');
             const dd = String(d.getDate()).padStart(2, '0');
             const dateStr = `${yyyy}-${mm}-${dd}`;
-            days.push({
-              date: dateStr,
-              isCompleted: false
-            });
+            days.push({ date: dateStr, isCompleted: false });
           }
           return days;
         };
 
         const daysList = ref(generateSummerDays());
 
-        // 今日の日付を取得 (YYYY-MM-DD)
-        const getTodayStr = () => {
-          const now = new Date();
-          const yyyy = now.getFullYear();
-          const mm = String(now.getMonth() + 1).padStart(2, '0');
-          const dd = String(now.getDate()).padStart(2, '0');
-          return `${yyyy}-${mm}-${dd}`;
-        };
-
-        // 未来の日付かどうか判定する関数
-        const isFutureDate = (dateStr) => {
-          if (!dateStr) return false;
-          return dateStr > getTodayStr();
-        };
-
-        // 日付インデックスの取得
         const getDayIndex = (dateStr) => {
           return daysList.value.findIndex(d => d.date === dateStr);
         };
 
-        // 生活リズムカードが必要な「最初と最後の1週間」を判定する関数
+        const isFutureDate = (dateStr) => {
+          if (!dateStr) return false;
+          const today = new Date();
+          const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+          return dateStr > todayStr;
+        };
+
         const isRhythmCardPeriod = (dateStr) => {
           if (!dateStr) return false;
           const index = getDayIndex(dateStr);
           if (index === -1) return false;
-          
           const totalDays = daysList.value.length;
-          const isFirstWeek = index < 7;
-          const isLastWeek = index >= (totalDays - 7);
-
-          return isFirstWeek || isLastWeek;
+          return index < 7 || index >= (totalDays - 7);
         };
 
-        // なわとびと鍵盤が1日おきに交互に出てくる（毎日どちらか一方が動的運行）
         const getSpecialType = (dateStr) => {
           const index = getDayIndex(dateStr);
           if (index === -1) return null;
           return index % 2 === 0 ? 'jump' : 'keyboard';
         };
 
-        const formatMonth = (dateStr) => {
-          const parts = dateStr.split('-');
-          return `${parseInt(parts[1])}がつ`;
-        };
-
-        const formatDay = (dateStr) => {
-          const parts = dateStr.split('-');
-          return parseInt(parts[2]);
-        };
+        const formatMonth = (dateStr) => parseInt(dateStr.split('-')[1]) + 'がつ';
+        const formatDay = (dateStr) => parseInt(dateStr.split('-')[2]);
 
         const formatFullDate = (dateStr) => {
           if (!dateStr) return '';
@@ -998,250 +925,205 @@
         const getDayOfWeek = (dateStr) => {
           const parts = dateStr.split('-');
           const d = new Date(parts[0], parts[1] - 1, parts[2]);
-          const dayOfWeeks = ['にち', 'げつ', 'か', 'すい', 'もく', 'きん', 'ど'];
-          return dayOfWeeks[d.getDay()];
+          return ['にち', 'げつ', 'か', 'すい', 'もく', 'きん', 'ど'][d.getDay()];
         };
 
         const getDayClass = (dateStr) => {
           const parts = dateStr.split('-');
-          const d = new Date(parts[0], parts[1] - 1, parts[2]);
-          const day = d.getDay();
+          const day = new Date(parts[0], parts[1] - 1, parts[2]).getDay();
           if (day === 0) return 'bg-red-100 text-red-600';
           if (day === 6) return 'bg-blue-100 text-blue-600';
           return 'bg-slate-100 text-slate-600';
         };
 
-        // 毎日うんてんデータのトグル
+        // 毎日うんてん項目の完了判定
+        const isDailyOnlyCompleted = computed(() => {
+          const log = dailyLogs.value[selectedDate.value];
+          if (!log) return false;
+          let isAll = log.skill && log.water && log.math && log.diary && log.tablet;
+          if (isRhythmCardPeriod(selectedDate.value)) {
+            isAll = isAll && log.rhythmCard;
+          }
+          return !!isAll;
+        });
+
+        // とくべつ列車の完了判定
+        const isSpecialCompleted = (dateStr) => {
+          const type = getSpecialType(dateStr);
+          if (!type) return true;
+          return !!(specialLogs.value[dateStr] && specialLogs.value[dateStr][type]);
+        };
+
+        // その日の全課題（毎日＋特別列車）完了判定
+        const isDayFullCompleted = computed(() => {
+          return isDailyOnlyCompleted.value && isSpecialCompleted(selectedDate.value);
+        });
+
+        const isDailyAllCompleted = computed(() => isDailyOnlyCompleted.value);
+
+        // カレンダーの緑チェックアイコン更新
+        const updateDayCompletionStatus = () => {
+          const dayObj = daysList.value.find(d => d.date === selectedDate.value);
+          const isFull = isDayFullCompleted.value;
+          if (dayObj) {
+            dayObj.isCompleted = isFull;
+          }
+        };
+
+        // 【新機能】毎日＆特別の両方が揃った瞬間にボーナス＆ポップアップを発動する処理
+        const checkAndTriggerFullBonus = () => {
+          if (isFutureDate(selectedDate.value)) return;
+          const isFullNow = isDayFullCompleted.value;
+          const wasClaimed = !!dailyBonusClaimed.value[selectedDate.value];
+
+          // 両方コンプリートし、まだボーナスを受け取っていない場合
+          if (isFullNow && !wasClaimed) {
+            points.value += 3;
+            dailyBonusClaimed.value[selectedDate.value] = true;
+            showBonusModal.value = true;
+            playFanfare();
+            setTimeout(() => { startConfetti(); }, 100);
+          }
+          // チェックが外れてコンプリート状態が崩れた場合
+          else if (!isFullNow && wasClaimed) {
+            points.value = Math.max(0, points.value - 3);
+            dailyBonusClaimed.value[selectedDate.value] = false;
+          }
+        };
+
         const getDailyStatus = (item) => {
           if (!dailyLogs.value[selectedDate.value]) return false;
           return dailyLogs.value[selectedDate.value][item] || false;
         };
 
         const toggleDaily = (item) => {
+          if (isFutureDate(selectedDate.value)) return;
           initAudio();
-          // 未来の日付はチェック禁止
-          if (isFutureDate(selectedDate.value)) {
-            playBeep(200, 0.2, 'sawtooth');
-            return;
-          }
-
           if (!dailyLogs.value[selectedDate.value]) {
-            dailyLogs.value[selectedDate.value] = {
-              skill: false, water: false, math: false, diary: false, tablet: false, rhythmCard: false
-            };
+            dailyLogs.value[selectedDate.value] = { skill: false, water: false, math: false, diary: false, tablet: false, rhythmCard: false };
           }
-          
-          const wasCompleted = isDailyAllCompleted.value;
 
-          // トグル
-          dailyLogs.value[selectedDate.value][item] = !dailyLogs.value[selectedDate.value][item];
+          const curr = dailyLogs.value[selectedDate.value][item];
+          dailyLogs.value[selectedDate.value][item] = !curr;
           playStampSound();
 
-          // 完了状態の変化によってボーナスマイルを正しく同期
-          const isNowCompleted = isDailyAllCompleted.value;
-          const dayObj = daysList.value.find(d => d.date === selectedDate.value);
-          
-          if (dayObj) {
-            if (!wasCompleted && isNowCompleted) {
-              dayObj.isCompleted = true;
-              points.value += 5; // すべてクリアボーナス！
-            } else if (wasCompleted && !isNowCompleted) {
-              dayObj.isCompleted = false;
-              points.value = Math.max(0, points.value - 5); // キャンセルされたら引く！
-            }
+          if (!curr) {
+            points.value += 1;
+          } else {
+            points.value = Math.max(0, points.value - 1);
           }
+
+          updateDayCompletionStatus();
+          checkAndTriggerFullBonus();
           saveToLocalStorage();
         };
 
-        // 特別列車のトグル
         const getSpecialStatus = (item) => {
           if (!specialLogs.value[selectedDate.value]) return false;
           return specialLogs.value[selectedDate.value][item] || false;
         };
 
         const toggleSpecial = (item) => {
+          if (isFutureDate(selectedDate.value)) return;
           initAudio();
-          // 未来の日付はチェック禁止
-          if (isFutureDate(selectedDate.value)) {
-            playBeep(200, 0.2, 'sawtooth');
-            return;
-          }
-
           if (!specialLogs.value[selectedDate.value]) {
             specialLogs.value[selectedDate.value] = { jump: false, keyboard: false };
           }
-          
-          const wasCompleted = isDailyAllCompleted.value;
-          const currentVal = specialLogs.value[selectedDate.value][item];
-          
-          specialLogs.value[selectedDate.value][item] = !currentVal;
+
+          const curr = specialLogs.value[selectedDate.value][item];
+          specialLogs.value[selectedDate.value][item] = !curr;
           playStampSound();
 
-          if (specialLogs.value[selectedDate.value][item]) {
+          if (!curr) {
             points.value += 3;
           } else {
             points.value = Math.max(0, points.value - 3);
           }
 
-          const isNowCompleted = isDailyAllCompleted.value;
-          const dayObj = daysList.value.find(d => d.date === selectedDate.value);
-          if (dayObj) {
-            if (!wasCompleted && isNowCompleted) {
-              dayObj.isCompleted = true;
-              points.value += 5;
-            } else if (wasCompleted && !isNowCompleted) {
-              dayObj.isCompleted = false;
-              points.value = Math.max(0, points.value - 5);
-            }
-          }
-
+          updateDayCompletionStatus();
+          checkAndTriggerFullBonus();
           saveToLocalStorage();
         };
 
-        const isSpecialCompleted = (dateStr) => {
-          const type = getSpecialType(dateStr);
-          if (!type) return true;
-          const log = specialLogs.value[dateStr];
-          return !!(log && log[type]);
-        };
-
-        const isDailyAllCompleted = computed(() => {
-          const dLog = dailyLogs.value[selectedDate.value];
-          if (!dLog) return false;
-
-          const hasBaseDaily = dLog.skill && dLog.water && dLog.math && dLog.diary && dLog.tablet;
-          const hasRhythmDaily = isRhythmCardPeriod(selectedDate.value) ? dLog.rhythmCard : true;
-
-          return !!(hasBaseDaily && hasRhythmDaily);
-        });
-
-        // 【大改良】電車の豪華出発進行アニメーションと紙吹雪
-        const currentDepartTrainSvg = computed(() => {
-          // ガチャで獲得済みの新幹線からランダムで一本を走らせる
-          if (collectedTrains.value.length > 0) {
-            const unlocked = trainList.filter(t => collectedTrains.value.includes(t.id));
-            const randomTrain = unlocked[Math.floor(Math.random() * unlocked.length)];
-            return randomTrain.svg;
-          }
-          // まだ何も解放していなければ、デフォルトでのぞみ号
-          return svgNozomi;
-        });
-
+        // 「しゅっぱつしんこう！！」ボタンを押したときの処理（ボーナス加算は行わない）
         const departTrain = () => {
-          if (!isDailyAllCompleted.value) return;
+          if (!isDailyAllCompleted.value || isFutureDate(selectedDate.value)) return;
           initAudio();
-          isRunning.value = true;
+
+          showDepartureModal.value = true;
           playTrainWhistle();
           playChugChug();
-
-          // 豪華セレブレーションを開始！
-          showCelebration.value = true;
-
-          // 1.5秒後にトップバーのミニ新幹線アニメを停止
-          setTimeout(() => {
-            isRunning.value = false;
-          }, 1500);
-
-          // 紙吹雪を降らせる
-          setTimeout(() => {
-            startConfetti();
-          }, 100);
+          saveToLocalStorage();
         };
 
-        const closeCelebration = () => {
-          showCelebration.value = false;
-          stopConfetti();
+        const closeDepartureModal = () => {
+          showDepartureModal.value = false;
         };
 
-        // 紙吹雪エンジンの簡易実装（HTML5 Canvas）
-        let confettiInterval = null;
+        const closeBonusModal = () => {
+          showBonusModal.value = false;
+        };
+
+        // 紙吹雪アニメーション
         const startConfetti = () => {
           const canvas = document.getElementById('confetti-canvas');
           if (!canvas) return;
           const ctx = canvas.getContext('2d');
-          
           canvas.width = window.innerWidth;
           canvas.height = window.innerHeight;
 
           const particles = [];
-          const colors = ['#f59e0b', '#ef4444', '#3b82f6', '#10b981', '#ec4899', '#8b5cf6'];
+          const colors = ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#facc15'];
 
-          for (let i = 0; i < 100; i++) {
+          for (let i = 0; i < 70; i++) {
             particles.push({
               x: Math.random() * canvas.width,
               y: Math.random() * canvas.height - canvas.height,
-              r: Math.random() * 6 + 4,
-              d: Math.random() * canvas.height,
+              size: Math.random() * 8 + 4,
               color: colors[Math.floor(Math.random() * colors.length)],
-              tilt: Math.random() * 10 - 5,
-              tiltAngleIncremental: Math.random() * 0.07 + 0.02,
-              tiltAngle: 0
+              speedY: Math.random() * 3 + 2,
+              speedX: Math.random() * 2 - 1,
+              angle: Math.random() * 360
             });
           }
 
-          const draw = () => {
+          function render() {
+            if (!showBonusModal.value) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, idx) => {
-              p.tiltAngle += p.tiltAngleIncremental;
-              p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
-              p.x += Math.sin(p.tiltAngle);
-              p.tilt = Math.sin(p.tiltAngle - idx / 3) * 15;
-
-              ctx.beginPath();
-              ctx.lineWidth = p.r;
-              ctx.strokeStyle = p.color;
-              ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
-              ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
-              ctx.stroke();
-
-              // ループさせる
+            particles.forEach(p => {
+              p.y += p.speedY;
+              p.x += p.speedX;
+              p.angle += 2;
               if (p.y > canvas.height) {
-                particles[idx] = {
-                  x: Math.random() * canvas.width,
-                  y: -20,
-                  r: p.r,
-                  d: p.d,
-                  color: p.color,
-                  tilt: p.tilt,
-                  tiltAngleIncremental: p.tiltAngleIncremental,
-                  tiltAngle: p.tiltAngle
-                };
+                p.y = -10;
+                p.x = Math.random() * canvas.width;
               }
+              ctx.save();
+              ctx.translate(p.x, p.y);
+              ctx.rotate((p.angle * Math.PI) / 180);
+              ctx.fillStyle = p.color;
+              ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+              ctx.restore();
             });
-          };
-
-          confettiInterval = setInterval(draw, 20);
-        };
-
-        const stopConfetti = () => {
-          if (confettiInterval) {
-            clearInterval(confettiInterval);
-            confettiInterval = null;
+            requestAnimationFrame(render);
           }
+          render();
         };
 
-        // 宿題スタンプ
         const changeMissionCount = (key, delta) => {
           initAudio();
-          const maxMap = {
-            pictureDiary: 2,
-            keyboardHarmonica: 3,
-            reading: 30,
-            artWork: 2
-          };
-          const current = missions.value[key] || 0;
+          const maxMap = { pictureDiary: 2, keyboardHarmonica: 3, reading: 30, artWork: 2 };
+          const curr = missions.value[key] || 0;
           const max = maxMap[key];
-          const next = Math.max(0, Math.min(max, current + delta));
+          const next = Math.max(0, Math.min(max, curr + delta));
 
-          if (next !== current) {
+          if (next !== curr) {
             missions.value[key] = next;
             playStampSound();
-            
             if (next === max) {
               points.value += 10;
               playFanfare();
-            }
-            else if (current === max && next < max) {
+            } else if (curr === max && next < max) {
               points.value = Math.max(0, points.value - 10);
             }
             saveToLocalStorage();
@@ -1260,19 +1142,14 @@
           saveToLocalStorage();
         };
 
-        // 進捗全体の計算
         const totalMissionsCount = computed(() => {
           let dailyTotal = daysList.value.length * 5;
           daysList.value.forEach(day => {
-            if (isRhythmCardPeriod(day.date)) {
-              dailyTotal += 1;
-            }
+            if (isRhythmCardPeriod(day.date)) dailyTotal += 1;
           });
-
           const specialTotal = daysList.value.length;
           const occasionalTotal = 2 + 3 + 30 + 2;
           const luggageTotal = luggage.value.length;
-
           return dailyTotal + specialTotal + occasionalTotal + luggageTotal;
         });
 
@@ -1286,22 +1163,15 @@
             if (day.tablet) count++;
             if (isRhythmCardPeriod(date) && day.rhythmCard) count++;
           });
-
           daysList.value.forEach(day => {
             const type = getSpecialType(day.date);
-            if (type && specialLogs.value[day.date] && specialLogs.value[day.date][type]) {
-              count++;
-            }
+            if (type && specialLogs.value[day.date] && specialLogs.value[day.date][type]) count++;
           });
-
           count += missions.value.pictureDiary;
           count += missions.value.keyboardHarmonica;
           count += missions.value.reading;
           count += missions.value.artWork;
-
-          luggage.value.forEach(item => {
-            if (item.checked) count++;
-          });
+          luggage.value.forEach(item => { if (item.checked) count++; });
           return count;
         });
 
@@ -1313,89 +1183,74 @@
         const selectDate = (date) => {
           selectedDate.value = date;
           if (!dailyLogs.value[date]) {
-            dailyLogs.value[date] = {
-              skill: false, water: false, math: false, diary: false, tablet: false, rhythmCard: false
-            };
+            dailyLogs.value[date] = { skill: false, water: false, math: false, diary: false, tablet: false, rhythmCard: false };
           }
           if (!specialLogs.value[date]) {
             specialLogs.value[date] = { jump: false, keyboard: false };
           }
         };
 
+        const selectTrain = (id) => {
+          if (isUnlocked(id)) {
+            selectedTrainId.value = id;
+            saveToLocalStorage();
+          }
+        };
+
+        const currentDepartTrainSvg = computed(() => {
+          const t = trainList.find(x => x.id === selectedTrainId.value);
+          return t ? t.svg : trainList[0].svg;
+        });
+
         const spinGacha = () => {
           if (points.value < 10) return;
           initAudio();
           points.value -= 10;
-          
           const randomIndex = Math.floor(Math.random() * trainList.length);
           const winTrain = trainList[randomIndex];
 
           if (!collectedTrains.value.includes(winTrain.id)) {
             collectedTrains.value.push(winTrain.id);
+            selectedTrainId.value = winTrain.id;
           }
-
           gachaResult.value = winTrain;
           playFanfare();
           saveToLocalStorage();
         };
 
-        const isUnlocked = (trainId) => {
-          return collectedTrains.value.includes(trainId);
-        };
+        const isUnlocked = (trainId) => collectedTrains.value.includes(trainId);
 
-        const summerDays = computed(() => {
-          return daysList.value;
-        });
+        const summerDays = computed(() => daysList.value);
 
         const saveToLocalStorage = () => {
           const data = {
             dailyLogs: dailyLogs.value,
             specialLogs: specialLogs.value,
+            dailyBonusClaimed: dailyBonusClaimed.value,
             missions: missions.value,
             luggage: luggage.value,
             points: points.value,
             collectedTrains: collectedTrains.value,
+            selectedTrainId: selectedTrainId.value,
             daysList: daysList.value
           };
-          localStorage.setItem('shinkansen_homework_data_v5', JSON.stringify(data));
+          localStorage.setItem('shinkansen_homework_data_v6', JSON.stringify(data));
         };
 
-        // 過去のすべてのバージョン（v1〜v4）から自動データ移行！
         const loadFromLocalStorage = () => {
-          let saved = localStorage.getItem('shinkansen_homework_data_v5');
-          
-          if (!saved) {
-            const oldKeys = [
-              'shinkansen_homework_data_v4',
-              'shinkansen_homework_data_v3',
-              'shinkansen_homework_data_v2',
-              'shinkansen_homework_data_v1'
-            ];
-            for (const oldKey of oldKeys) {
-              const oldData = localStorage.getItem(oldKey);
-              if (oldData) {
-                saved = oldData;
-                localStorage.setItem('shinkansen_homework_data_v5', oldData);
-                console.log(`🎉 データを自動で ${oldKey} から v5（超リアル新幹線版） へ引き継ぎました！`);
-                break;
-              }
-            }
-          }
-
+          const saved = localStorage.getItem('shinkansen_homework_data_v6') || 
+                        localStorage.getItem('shinkansen_homework_data_v5');
           if (saved) {
             try {
               const data = JSON.parse(saved);
               dailyLogs.value = data.dailyLogs || {};
               specialLogs.value = data.specialLogs || {};
-              missions.value = data.missions || {
-                pictureDiary: 0,
-                keyboardHarmonica: 0,
-                reading: 0,
-                artWork: 0
-              };
+              dailyBonusClaimed.value = data.dailyBonusClaimed || {};
+              missions.value = data.missions || { pictureDiary: 0, keyboardHarmonica: 0, reading: 0, artWork: 0 };
               if (data.luggage) luggage.value = data.luggage;
               points.value = data.points || 0;
-              collectedTrains.value = data.collectedTrains || [];
+              collectedTrains.value = data.collectedTrains || ['hayabusa'];
+              selectedTrainId.value = data.selectedTrainId || 'hayabusa';
               if (data.daysList) daysList.value = data.daysList;
             } catch (e) {
               console.error('Data load error', e);
@@ -1405,14 +1260,15 @@
 
         onMounted(() => {
           loadFromLocalStorage();
+          showDepartureModal.value = false;
+          showBonusModal.value = false;
           
-          // 初日「2026-07-18」を選択状態にする
-          selectedDate.value = '2026-07-18';
-          
+          const today = new Date();
+          const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+          selectedDate.value = (todayStr >= '2026-07-18' && todayStr <= '2026-08-27') ? todayStr : '2026-07-18';
+
           if (!dailyLogs.value[selectedDate.value]) {
-            dailyLogs.value[selectedDate.value] = {
-              skill: false, water: false, math: false, diary: false, tablet: false, rhythmCard: false
-            };
+            dailyLogs.value[selectedDate.value] = { skill: false, water: false, math: false, diary: false, tablet: false, rhythmCard: false };
           }
           if (!specialLogs.value[selectedDate.value]) {
             specialLogs.value[selectedDate.value] = { jump: false, keyboard: false };
@@ -1438,13 +1294,15 @@
           completedMissionsCount,
           totalMissionsCount,
           isRunning,
-          showCelebration,
+          showDepartureModal,
+          showBonusModal,
+          selectedTrainId,
           currentDepartTrainSvg,
           
+          isFutureDate,
           isRhythmCardPeriod,
           getSpecialType,
           isSpecialCompleted,
-          isFutureDate,
           selectDate,
           formatMonth,
           formatDay,
@@ -1458,9 +1316,12 @@
           toggleSpecial,
           isDailyAllCompleted,
           departTrain,
-          closeCelebration,
+          closeDepartureModal,
+          closeBonusModal,
+          selectTrain,
           
           changeMissionCount,
+          
           toggleLuggage,
           spinGacha,
           isUnlocked
