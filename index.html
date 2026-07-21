@@ -179,6 +179,11 @@
               ⏰リズム
             </div>
 
+            <!-- 未来の日付ロックマーク -->
+            <div v-if="isFutureDate(day.date)" class="absolute top-0.5 right-0.5 text-[8px] opacity-70">
+              🔒
+            </div>
+
             <span class="text-[10px] text-slate-400 font-bold">{{ formatMonth(day.date) }}</span>
             <span class="text-lg font-extrabold leading-none my-0.5">{{ formatDay(day.date) }}</span>
             <span class="text-[9px] font-bold px-1.5 py-0.5 rounded" :class="getDayClass(day.date)">
@@ -201,7 +206,12 @@
           </span>
         </div>
 
-        <div class="space-y-4">
+        <!-- 未来の日付ロックアナウンス -->
+        <div v-if="isFutureDate(selectedDate)" class="bg-slate-800 text-yellow-300 rounded-2xl p-3 mb-4 text-center border-2 border-yellow-400 font-bold text-xs shadow-md">
+          🔒 あした以降の しゅくだいは、その日に なってから チェックしようね！
+        </div>
+
+        <div class="space-y-4" :class="isFutureDate(selectedDate) ? 'opacity-50 pointer-events-none' : ''">
           <!-- ① 生活リズムカード -->
           <div v-if="isRhythmCardPeriod(selectedDate)" class="flex items-center justify-between bg-gradient-to-r from-purple-50 to-purple-100 p-3 rounded-2xl border-2 border-purple-800 cursor-pointer animate-fade-in" @click="toggleDaily('rhythmCard')">
             <div class="flex items-center gap-3">
@@ -296,14 +306,7 @@
                   class="w-full py-4 rounded-2xl font-extrabold text-lg border-4 border-slate-800 btn-shadow flex items-center justify-center gap-2 transition-all">
             <span>🚄</span>
             <span>{{ isDailyAllCompleted ? 'しゅっぱつ しんこう！！' : 'ぜんぶクリアで はっしゃ！' }}</span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- タブ2: とくべつれっしゃ -->
-    <div v-show="currentTab === 'special'" class="space-y-4">
-      <div class="bg-gradient-to-b from-amber-50 to-orange-50 border-4 border-slate-800 rounded-3xl p-5 card-shadow">
+        <!-- とくべつ列車 ダイヤ -->
         <div class="flex justify-between items-center border-b-2 border-dashed border-orange-300 pb-3 mb-4">
           <span class="text-xs font-bold text-slate-500">⚡ とくべつ れっしゃ ダイヤ</span>
           <span class="text-xs font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full border border-orange-300">
@@ -311,8 +314,15 @@
           </span>
         </div>
 
+        <!-- 未来の日付ロックステータス -->
+        <div v-if="isFutureDate(selectedDate)" class="bg-slate-800 text-yellow-300 rounded-2xl p-4 text-center mb-6 border-2 border-yellow-400">
+          <span class="text-3xl block mb-1">🔒 🛤️</span>
+          <h3 class="font-extrabold text-sm"><ruby>とくべつ列車<rt>れっしゃ</rt></ruby>は まだ 出発できません</h3>
+          <p class="text-[10px] text-yellow-200 mt-1">その日に なってから チャレンジしよう！</p>
+        </div>
+
         <!-- なわとび列車 運行中！ -->
-        <div v-if="getSpecialType(selectedDate) === 'jump'" class="space-y-4">
+        <div v-else-if="getSpecialType(selectedDate) === 'jump'" class="space-y-4">
           <div class="bg-yellow-100 border-4 border-yellow-400 rounded-2xl p-4 text-center">
             <span class="text-4xl block mb-1">🤸 💨</span>
             <h3 class="font-extrabold text-sm text-yellow-900"><ruby>なわとび号<rt>ごう</rt></ruby> 運行中！</h3>
@@ -339,7 +349,7 @@
         </div>
 
         <!-- けんばんハーモニカ列車 運行中！ -->
-        <div v-if="getSpecialType(selectedDate) === 'keyboard'" class="space-y-4">
+        <div v-else-if="getSpecialType(selectedDate) === 'keyboard'" class="space-y-4">
           <div class="bg-blue-100 border-4 border-blue-400 rounded-2xl p-4 text-center">
             <span class="text-4xl block mb-1">🎹 🎶</span>
             <h3 class="font-extrabold text-sm text-blue-900"><ruby>けんばん号<rt>ごう</rt></ruby> 運行中！</h3>
@@ -919,6 +929,21 @@
 
         const daysList = ref(generateSummerDays());
 
+        // 今日の日付を取得 (YYYY-MM-DD)
+        const getTodayStr = () => {
+          const now = new Date();
+          const yyyy = now.getFullYear();
+          const mm = String(now.getMonth() + 1).padStart(2, '0');
+          const dd = String(now.getDate()).padStart(2, '0');
+          return `${yyyy}-${mm}-${dd}`;
+        };
+
+        // 未来の日付かどうか判定する関数
+        const isFutureDate = (dateStr) => {
+          if (!dateStr) return false;
+          return dateStr > getTodayStr();
+        };
+
         // 日付インデックスの取得
         const getDayIndex = (dateStr) => {
           return daysList.value.findIndex(d => d.date === dateStr);
@@ -986,6 +1011,12 @@
 
         const toggleDaily = (item) => {
           initAudio();
+          // 未来の日付はチェック禁止
+          if (isFutureDate(selectedDate.value)) {
+            playBeep(200, 0.2, 'sawtooth');
+            return;
+          }
+
           if (!dailyLogs.value[selectedDate.value]) {
             dailyLogs.value[selectedDate.value] = {
               skill: false, water: false, math: false, diary: false, tablet: false, rhythmCard: false
@@ -993,30 +1024,22 @@
           }
           
           const wasCompleted = isDailyAllCompleted.value;
-          const isCheckedBefore = dailyLogs.value[selectedDate.value][item];
 
           // トグル
-          dailyLogs.value[selectedDate.value][item] = !isCheckedBefore;
+          dailyLogs.value[selectedDate.value][item] = !dailyLogs.value[selectedDate.value][item];
           playStampSound();
 
-          // クリアごとにリアルタイムで1マイル増減！
-          if (dailyLogs.value[selectedDate.value][item]) {
-            points.value += 1;
-          } else {
-            points.value = Math.max(0, points.value - 1);
-          }
-
-          // すべて完了した時のボーナスマイル同期
+          // 完了状態の変化によってボーナスマイルを正しく同期
           const isNowCompleted = isDailyAllCompleted.value;
           const dayObj = daysList.value.find(d => d.date === selectedDate.value);
           
           if (dayObj) {
             if (!wasCompleted && isNowCompleted) {
               dayObj.isCompleted = true;
-              points.value += 5; // コンプリートボーナス+5！
+              points.value += 5; // すべてクリアボーナス！
             } else if (wasCompleted && !isNowCompleted) {
               dayObj.isCompleted = false;
-              points.value = Math.max(0, points.value - 5);
+              points.value = Math.max(0, points.value - 5); // キャンセルされたら引く！
             }
           }
           saveToLocalStorage();
@@ -1030,24 +1053,38 @@
 
         const toggleSpecial = (item) => {
           initAudio();
+          // 未来の日付はチェック禁止
+          if (isFutureDate(selectedDate.value)) {
+            playBeep(200, 0.2, 'sawtooth');
+            return;
+          }
+
           if (!specialLogs.value[selectedDate.value]) {
             specialLogs.value[selectedDate.value] = { jump: false, keyboard: false };
           }
           
+          const wasCompleted = isDailyAllCompleted.value;
           const currentVal = specialLogs.value[selectedDate.value][item];
+          
           specialLogs.value[selectedDate.value][item] = !currentVal;
           playStampSound();
 
           if (specialLogs.value[selectedDate.value][item]) {
-            points.value += 3; 
+            points.value += 3;
           } else {
-            points.value = Math.max(0, points.value - 3); 
+            points.value = Math.max(0, points.value - 3);
           }
 
           const isNowCompleted = isDailyAllCompleted.value;
           const dayObj = daysList.value.find(d => d.date === selectedDate.value);
           if (dayObj) {
-            dayObj.isCompleted = isNowCompleted;
+            if (!wasCompleted && isNowCompleted) {
+              dayObj.isCompleted = true;
+              points.value += 5;
+            } else if (wasCompleted && !isNowCompleted) {
+              dayObj.isCompleted = false;
+              points.value = Math.max(0, points.value - 5);
+            }
           }
 
           saveToLocalStorage();
@@ -1399,6 +1436,7 @@
           isRhythmCardPeriod,
           getSpecialType,
           isSpecialCompleted,
+          isFutureDate,
           selectDate,
           formatMonth,
           formatDay,
