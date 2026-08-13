@@ -3172,7 +3172,25 @@
               missions.value = data.missions || { pictureDiary: 0, keyboardHarmonica: 0, reading: 0, artWork: 0 };
               if (data.luggage) luggage.value = data.luggage;
               points.value = data.points || 0;
-              collectedTrains.value = data.collectedTrains || ['hayabusa'];
+              
+              const migrationMap = {
+                'linear': 'shinkansen_0',
+                'sl': 'shinkansen_800',
+                'nex': 'narita',
+                'azusa': 'alfarex',
+                'kuroshio': 'shinkansen_n700a',
+                'tsubame': 'yamanote',
+                'thunderbird': 'chuo',
+                'yufuinnomori': 'keihin',
+                'hinotori': 'sobu'
+              };
+              
+              if (data.collectedTrains) {
+                const migrated = data.collectedTrains.map(id => migrationMap[id] || id);
+                collectedTrains.value = [...new Set(migrated)];
+              } else {
+                collectedTrains.value = ['hayabusa'];
+              }
               selectedTrainId.value = data.selectedTrainId || 'hayabusa';
               if (data.daysList) daysList.value = data.daysList;
             } catch (e) {
