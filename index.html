@@ -717,443 +717,1938 @@
         const gachaResult = ref(null);
 
         // 車体後部が平らなリアルSVGイラスト群 (16種類)
-        const trainList = [
+                const trainList = [
           { 
             id: 'hayabusa', name: 'E5系 はやぶさ', desc: '最高時速320kmのグリーン超特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <!-- Wheels/Bogies -->
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="82" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <circle cx="26" cy="47" r="2.5" fill="#1e293b"/> <circle cx="34" cy="47" r="2.5" fill="#1e293b"/>
-                    <circle cx="56" cy="47" r="2.5" fill="#1e293b"/> <circle cx="64" cy="47" r="2.5" fill="#1e293b"/>
-                    <circle cx="86" cy="47" r="2.5" fill="#1e293b"/> <circle cx="94" cy="47" r="2.5" fill="#1e293b"/>
-                    <!-- Base Chassis -->
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <!-- Body Lower (White) -->
-                    <path d="M5,35 L156,35 C158,35 158,40 157,42 L5,42 Z" fill="#f8fafc"/>
-                    <!-- Pink Stripe -->
-                    <path d="M5,33 L154,33 L156,35 L5,35 Z" fill="#e91e63"/>
-                    <!-- Body Upper (Green) -->
-                    <path d="M5,10 L100,10 C130,10 148,22 154,33 L5,33 Z" fill="#00a86b"/>
-                    <!-- Roof/Pantograph -->
-                    <rect x="40" y="7" width="15" height="3" fill="#64748b"/>
-                    <path d="M45,7 L47,3 L52,3 L50,7 Z" fill="#94a3b8"/>
-                    <!-- Windows -->
-                    <rect x="25" y="16" width="12" height="7" rx="2" fill="#0f172a"/>
-                    <rect x="42" y="16" width="12" height="7" rx="2" fill="#0f172a"/>
-                    <rect x="59" y="16" width="12" height="7" rx="2" fill="#0f172a"/>
-                    <rect x="76" y="16" width="12" height="7" rx="2" fill="#0f172a"/>
-                    <!-- Driver Window -->
-                    <path d="M115,18 Q135,20 140,28 L113,28 Z" fill="#0f172a"/>
-                    <!-- Door -->
-                    <rect x="12" y="15" width="6" height="20" rx="0.5" fill="#e2e8f0" stroke="#cbd5e1"/>
-                  </svg>`
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 50,70 -->
+    <rect x="30" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="40" cy="68" r="3" fill="#1e293b" />
+    <circle cx="60" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="40" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="40" cy="72" r="2" fill="#0f172a" />
+    <circle cx="60" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="60" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="48" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="40" y1="72" x2="60" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 120,70 -->
+    <rect x="100" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="110" cy="68" r="3" fill="#1e293b" />
+    <circle cx="130" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="110" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="110" cy="72" r="2" fill="#0f172a" />
+    <circle cx="130" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="130" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="118" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="110" y1="72" x2="130" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,30 170,25 150,25 L10,25 Z" fill="#00a86b" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,30 170,25 150,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,40 170,40 150,40 L10,40 Z" fill="#f8fafc" />
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,40 170,40 150,40 L10,40 Z" fill="url(#grad-metal)" />
+    <path d="M10,37 L145,37 C165,37 180,40 190,45 L185,45 C170,41 150,41 10,41 Z" fill="#e91e63" />
+    <path d="M155,27 Q175,30 185,38 L160,38 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="205" cy="42" r="2.5" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
           { 
             id: 'komachi', name: 'E6系 こまち', desc: '茜色に輝くミニ新幹線！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <circle cx="26" cy="47" r="2.5" fill="#1e293b"/> <circle cx="34" cy="47" r="2.5" fill="#1e293b"/>
-                    <circle cx="56" cy="47" r="2.5" fill="#1e293b"/> <circle cx="64" cy="47" r="2.5" fill="#1e293b"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,25 L156,25 C158,25 158,40 157,42 L5,42 Z" fill="#f8fafc"/>
-                    <path d="M5,10 L100,10 C130,10 148,20 154,25 L5,25 Z" fill="#dc2626"/>
-                    <!-- Grey Roof -->
-                    <path d="M5,10 L95,10 C110,10 120,13 125,16 L5,16 Z" fill="#64748b"/>
-                    <!-- Pantograph -->
-                    <rect x="40" y="7" width="15" height="3" fill="#64748b"/>
-                    <path d="M47,7 L45,2 L50,2 L52,7 Z" fill="#ef4444"/>
-                    <!-- Windows -->
-                    <rect x="25" y="28" width="12" height="7" rx="2" fill="#0f172a"/>
-                    <rect x="42" y="28" width="12" height="7" rx="2" fill="#0f172a"/>
-                    <rect x="59" y="28" width="12" height="7" rx="2" fill="#0f172a"/>
-                    <rect x="76" y="28" width="12" height="7" rx="2" fill="#0f172a"/>
-                    <path d="M120,18 Q138,20 144,26 L118,26 Z" fill="#0f172a"/>
-                    <rect x="12" y="25" width="6" height="15" rx="0.5" fill="#e2e8f0" stroke="#cbd5e1"/>
-                  </svg>`
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 50,70 -->
+    <rect x="30" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="40" cy="68" r="3" fill="#1e293b" />
+    <circle cx="60" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="40" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="40" cy="72" r="2" fill="#0f172a" />
+    <circle cx="60" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="60" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="48" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="40" y1="72" x2="60" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 120,70 -->
+    <rect x="100" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="110" cy="68" r="3" fill="#1e293b" />
+    <circle cx="130" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="110" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="110" cy="72" r="2" fill="#0f172a" />
+    <circle cx="130" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="130" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="118" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="110" y1="72" x2="130" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,30 170,25 150,25 L10,25 Z" fill="#dc2626" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,30 170,25 150,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,40 170,40 150,40 L10,40 Z" fill="#f8fafc" />
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,40 170,40 150,40 L10,40 Z" fill="url(#grad-metal)" />
+    <path d="M10,37 L145,37 C165,37 180,40 190,45 L185,45 C170,41 150,41 10,41 Z" fill="#1e293b" />
+    <path d="M155,27 Q175,30 185,38 L160,38 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="205" cy="42" r="2.5" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
           { 
             id: 'dr_yellow', name: 'ドクターイエロー', desc: '見ると幸せになれる黄色の新幹線！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#1e293b"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#1e293b"/>
-                    <circle cx="26" cy="47" r="2.5" fill="#0f172a"/> <circle cx="34" cy="47" r="2.5" fill="#0f172a"/>
-                    <circle cx="56" cy="47" r="2.5" fill="#0f172a"/> <circle cx="64" cy="47" r="2.5" fill="#0f172a"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,12 L110,12 C135,12 152,22 157,40 L157,42 L5,42 Z" fill="#facc15"/>
-                    <path d="M5,26 L157,26 L157,32 L5,32 Z" fill="#1e40af"/>
-                    <!-- Cameras/Sensors -->
-                    <rect x="40" y="9" width="10" height="3" fill="#cbd5e1" rx="1"/>
-                    <circle cx="80" cy="18" r="2" fill="#ef4444"/>
-                    <rect x="25" y="18" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="42" y="18" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="59" y="18" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <path d="M122,17 Q138,19 144,25 L120,25 Z" fill="#0f172a"/>
-                    <rect x="12" y="15" width="6" height="22" rx="0.5" fill="#fef08a" stroke="#ca8a04"/>
-                  </svg>`
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 50,70 -->
+    <rect x="30" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="40" cy="68" r="3" fill="#1e293b" />
+    <circle cx="60" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="40" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="40" cy="72" r="2" fill="#0f172a" />
+    <circle cx="60" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="60" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="48" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="40" y1="72" x2="60" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 120,70 -->
+    <rect x="100" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="110" cy="68" r="3" fill="#1e293b" />
+    <circle cx="130" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="110" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="110" cy="72" r="2" fill="#0f172a" />
+    <circle cx="130" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="130" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="118" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="110" y1="72" x2="130" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,27 175,25 160,25 L10,25 Z" fill="#facc15" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,27 175,25 160,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,39 L160,39 C175,39 190,41 200,40 L195,40 C185,43 160,43 10,43 Z" fill="#1d4ed8" />
+    <path d="M165,28 Q185,33 190,41 L165,41 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="205" cy="42" r="2.5" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
           { 
             id: 'kagayaki', name: 'E7系 かがやき', desc: '青とゴールドの絢欄豪華な新幹線！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <circle cx="26" cy="47" r="2.5" fill="#1e293b"/> <circle cx="34" cy="47" r="2.5" fill="#1e293b"/>
-                    <circle cx="56" cy="47" r="2.5" fill="#1e293b"/> <circle cx="64" cy="47" r="2.5" fill="#1e293b"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,12 L115,12 C135,12 152,24 157,42 L5,42 Z" fill="#f8fafc"/>
-                    <path d="M5,12 L110,12 C130,12 145,22 150,28 L5,28 Z" fill="#0284c7"/>
-                    <path d="M5,28 L152,28 C153,28 154,30 155,32 L5,32 Z" fill="#d97706"/>
-                    <rect x="25" y="34" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="42" y="34" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="59" y="34" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="76" y="34" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <path d="M122,18 Q138,20 144,26 L120,26 Z" fill="#0f172a"/>
-                  </svg>`
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 50,70 -->
+    <rect x="30" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="40" cy="68" r="3" fill="#1e293b" />
+    <circle cx="60" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="40" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="40" cy="72" r="2" fill="#0f172a" />
+    <circle cx="60" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="60" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="48" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="40" y1="72" x2="60" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 120,70 -->
+    <rect x="100" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="110" cy="68" r="3" fill="#1e293b" />
+    <circle cx="130" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="110" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="110" cy="72" r="2" fill="#0f172a" />
+    <circle cx="130" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="130" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="118" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="110" y1="72" x2="130" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,27 175,25 160,25 L10,25 Z" fill="#0284c7" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,27 175,25 160,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,40 175,40 160,40 L10,40 Z" fill="#f8fafc" />
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,40 175,40 160,40 L10,40 Z" fill="url(#grad-metal)" />
+    <path d="M10,39 L160,39 C175,39 190,41 200,40 L195,40 C185,43 160,43 10,43 Z" fill="#d97706" />
+    <path d="M165,28 Q185,33 190,41 L165,41 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="205" cy="42" r="2.5" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
           { 
             id: 'nozomi', name: 'N700S のぞみ', desc: '日本の大動脈を走る最新のエース！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <circle cx="26" cy="47" r="2.5" fill="#1e293b"/> <circle cx="34" cy="47" r="2.5" fill="#1e293b"/>
-                    <circle cx="56" cy="47" r="2.5" fill="#1e293b"/> <circle cx="64" cy="47" r="2.5" fill="#1e293b"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#94a3b8"/>
-                    <path d="M5,12 L115,12 C135,12 152,24 157,42 L5,42 Z" fill="#f8fafc"/>
-                    <!-- N700S Dual Blue Stripe -->
-                    <path d="M5,28 L157,28 L157,32 L5,32 Z" fill="#1d4ed8"/>
-                    <path d="M5,34 L157,34 L157,36 L5,36 Z" fill="#1d4ed8"/>
-                    <!-- S mark tail end -->
-                    <path d="M140,28 L150,28 L145,32 L152,32" stroke="#1d4ed8" stroke-width="2" fill="none"/>
-                    <rect x="25" y="18" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="42" y="18" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="59" y="18" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="76" y="18" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <path d="M122,17 Q138,19 144,26 L120,26 Z" fill="#0f172a"/>
-                  </svg>`
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 50,70 -->
+    <rect x="30" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="40" cy="68" r="3" fill="#1e293b" />
+    <circle cx="60" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="40" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="40" cy="72" r="2" fill="#0f172a" />
+    <circle cx="60" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="60" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="48" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="40" y1="72" x2="60" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 120,70 -->
+    <rect x="100" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="110" cy="68" r="3" fill="#1e293b" />
+    <circle cx="130" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="110" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="110" cy="72" r="2" fill="#0f172a" />
+    <circle cx="130" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="130" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="118" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="110" y1="72" x2="130" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,27 175,25 160,25 L10,25 Z" fill="#f8fafc" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,27 175,25 160,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,39 L160,39 C175,39 190,41 200,40 L195,40 C185,43 160,43 10,43 Z" fill="#1d4ed8" />
+    <path d="M165,28 Q185,33 190,41 L165,41 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="205" cy="42" r="2.5" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
           { 
             id: 'shinkansen_500', name: '500系 新幹線', desc: 'ジェット機みたいな超ロングノーズ！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,14 L90,14 C125,14 150,28 157,42 L5,42 Z" fill="#64748b"/>
-                    <path d="M5,26 L155,26 C156,26 156.5,29 157,32 L5,32 Z" fill="#2563eb"/>
-                    <path d="M5,32 L157,32 C157,38 157,40 157,42 L5,42 Z" fill="#94a3b8"/>
-                    <circle cx="30" cy="20" r="3" fill="#0f172a"/>
-                    <circle cx="48" cy="20" r="3" fill="#0f172a"/>
-                    <circle cx="66" cy="20" r="3" fill="#0f172a"/>
-                    <circle cx="84" cy="20" r="3" fill="#0f172a"/>
-                    <path d="M105,17 Q135,21 142,27 L103,27 Z" fill="#0f172a"/>
-                  </svg>`
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 50,70 -->
+    <rect x="30" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="40" cy="68" r="3" fill="#1e293b" />
+    <circle cx="60" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="40" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="40" cy="72" r="2" fill="#0f172a" />
+    <circle cx="60" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="60" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="48" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="40" y1="72" x2="60" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 120,70 -->
+    <rect x="100" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="110" cy="68" r="3" fill="#1e293b" />
+    <circle cx="130" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="110" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="110" cy="72" r="2" fill="#0f172a" />
+    <circle cx="130" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="130" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="118" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="110" y1="72" x2="130" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,30 170,25 150,25 L10,25 Z" fill="#64748b" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,30 170,25 150,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,37 L145,37 C165,37 180,40 190,45 L185,45 C170,41 150,41 10,41 Z" fill="#2563eb" />
+    <path d="M155,27 Q175,30 185,38 L160,38 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="205" cy="42" r="2.5" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
           { 
-            id: 'linear', name: 'L0系 リニア', desc: '時速500kmで宙に浮く未来の超特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <!-- Maglev Guide-way base -->
-                    <rect x="5" y="44" width="150" height="4" fill="#cbd5e1"/>
-                    <path d="M5,16 L90,16 C128,16 152,28 157,40 L157,42 L5,42 Z" fill="#f8fafc"/>
-                    <path d="M5,26 L157,26 L157,30 L5,30 Z" fill="#1d4ed8"/>
-                    <path d="M5,38 L157,38 L157,40 L5,40 Z" fill="#1d4ed8"/>
-                    <rect x="25" y="19" width="12" height="4.5" rx="1" fill="#0f172a"/>
-                    <rect x="45" y="19" width="12" height="4.5" rx="1" fill="#0f172a"/>
-                    <rect x="65" y="19" width="12" height="4.5" rx="1" fill="#0f172a"/>
-                    <path d="M110,18 Q138,20 145,26 L108,26 Z" fill="#0f172a"/>
-                  </svg>`
+            id: 'shinkansen_0', name: '0系 新幹線', desc: '世界初の新幹線！だんご鼻がかわいい！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L170,60 C200,60 205,25 170,25 L10,25 Z" fill="#f8fafc" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L170,60 C200,60 205,25 170,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,39 L170,39 C190,39 195,43 195,45 L190,45 C190,43 170,43 10,43 Z" fill="#1d4ed8" />
+    <path d="M175,29 Q195,31 195,40 L175,40 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="202" cy="50" r="3" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <circle cx="30" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="28" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="60" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="58" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="90" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="88" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="120" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="118" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="150" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="148" cy="36" r="2" fill="white" opacity="0.3" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
           { 
-            id: 'sl', name: 'SLやまぐち号', desc: 'モクモク煙を吹いて走る黒鉄の機関車！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <!-- Smoke -->
-                    <circle cx="120" cy="5" r="4" fill="#cbd5e1" opacity="0.8"/>
-                    <circle cx="130" cy="2" r="6" fill="#cbd5e1" opacity="0.6"/>
-                    <circle cx="145" cy="0" r="8" fill="#cbd5e1" opacity="0.4"/>
-                    <!-- Tender (Coal car) -->
-                    <rect x="5" y="15" width="45" height="28" fill="#111827" rx="1"/>
-                    <rect x="15" y="20" width="12" height="12" fill="#fef08a" rx="1"/>
-                    <rect x="33" y="20" width="12" height="12" fill="#fef08a" rx="1"/>
-                    <!-- Boiler -->
-                    <rect x="50" y="22" width="65" height="21" fill="#1e293b" rx="2"/>
-                    <rect x="115" y="25" width="5" height="18" fill="#111827"/>
-                    <!-- Funnel -->
-                    <path d="M110,12 L120,12 L118,22 L112,22 Z" fill="#111827"/>
-                    <!-- Cabin -->
-                    <rect x="45" y="10" width="20" height="33" fill="#111827" rx="2"/>
-                    <rect x="50" y="15" width="10" height="10" fill="#fef08a" rx="1"/>
-                    <!-- Wheels -->
-                    <circle cx="15" cy="42" r="5" fill="#475569" stroke="#94a3b8" stroke-width="1"/>
-                    <circle cx="35" cy="42" r="5" fill="#475569" stroke="#94a3b8" stroke-width="1"/>
-                    <circle cx="70" cy="40" r="7" fill="#dc2626" stroke="#f8fafc" stroke-width="1.5"/>
-                    <circle cx="90" cy="40" r="7" fill="#dc2626" stroke="#f8fafc" stroke-width="1.5"/>
-                    <circle cx="110" cy="40" r="7" fill="#dc2626" stroke="#f8fafc" stroke-width="1.5"/>
-                    <line x1="70" y1="40" x2="110" y2="40" stroke="#f8fafc" stroke-width="2"/>
-                  </svg>`
+            id: 'tsubasa', name: 'E3系 つばさ', desc: '紫と白のシックな山形新幹線！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 50,70 -->
+    <rect x="30" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="40" cy="68" r="3" fill="#1e293b" />
+    <circle cx="60" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="40" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="40" cy="72" r="2" fill="#0f172a" />
+    <circle cx="60" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="60" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="48" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="40" y1="72" x2="60" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 120,70 -->
+    <rect x="100" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="110" cy="68" r="3" fill="#1e293b" />
+    <circle cx="130" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="110" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="110" cy="72" r="2" fill="#0f172a" />
+    <circle cx="130" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="130" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="118" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="110" y1="72" x2="130" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,30 170,25 150,25 L10,25 Z" fill="#6b21a8" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,30 170,25 150,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,40 170,40 150,40 L10,40 Z" fill="#f8fafc" />
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,40 170,40 150,40 L10,40 Z" fill="url(#grad-metal)" />
+    <path d="M10,37 L145,37 C165,37 180,40 190,45 L185,45 C170,41 150,41 10,41 Z" fill="#ef4444" />
+    <path d="M155,27 Q175,30 185,38 L160,38 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="205" cy="42" r="2.5" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
-            id: 'nex', name: '成田エクスプレス', desc: '成田空港へ走るスタイリッシュな特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <circle cx="26" cy="47" r="2.5" fill="#1e293b"/> <circle cx="34" cy="47" r="2.5" fill="#1e293b"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,12 L120,12 C140,12 154,20 157,40 L157,42 L5,42 Z" fill="#f8fafc"/>
-                    <path d="M5,12 L110,12 C130,12 145,18 152,26 L5,26 Z" fill="#0f172a"/>
-                    <!-- Red Front/Base -->
-                    <path d="M5,42 L157,42 L157,45 L5,45 Z" fill="#e11d48"/>
-                    <path d="M130,12 C145,12 157,20 157,40 L157,42 L145,42 C145,28 135,26 120,26 Z" fill="#e11d48"/>
-                    <!-- Logo mark abstract -->
-                    <circle cx="140" cy="35" r="4" fill="#f8fafc"/>
-                    <rect x="25" y="28" width="12" height="7" rx="1" fill="#0f172a"/>
-                    <rect x="42" y="28" width="12" height="7" rx="1" fill="#0f172a"/>
-                    <rect x="59" y="28" width="12" height="7" rx="1" fill="#0f172a"/>
-                    <path d="M125,27 Q135,28 140,32 L115,32 Z" fill="#0f172a"/>
-                  </svg>`
+          { 
+            id: 'shinkansen_800', name: '800系 つばめ', desc: '和の心を持った九州新幹線！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 50,70 -->
+    <rect x="30" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="40" cy="68" r="3" fill="#1e293b" />
+    <circle cx="60" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="40" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="40" cy="72" r="2" fill="#0f172a" />
+    <circle cx="60" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="60" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="48" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="40" y1="72" x2="60" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 120,70 -->
+    <rect x="100" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="110" cy="68" r="3" fill="#1e293b" />
+    <circle cx="130" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="110" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="110" cy="72" r="2" fill="#0f172a" />
+    <circle cx="130" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="130" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="118" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="110" y1="72" x2="130" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,27 175,25 160,25 L10,25 Z" fill="#f8fafc" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,27 175,25 160,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,39 L160,39 C175,39 190,41 200,40 L195,40 C185,43 160,43 10,43 Z" fill="#dc2626" />
+    <path d="M165,28 Q185,33 190,41 L165,41 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="205" cy="42" r="2.5" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
-            id: 'azusa', name: '特急あずさ (E353系)', desc: '信州の山々を駆け抜ける紫の特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,12 L115,12 C135,12 152,24 157,42 L5,42 Z" fill="#f8fafc"/>
-                    <!-- Black Mask -->
-                    <path d="M5,12 L110,12 C130,12 145,22 150,28 L5,28 Z" fill="#0f172a"/>
-                    <!-- Purple Stripe -->
-                    <path d="M5,28 L152,28 L154,30 L5,30 Z" fill="#581c87"/>
-                    <!-- Pink Accent -->
-                    <path d="M152,28 L155,36 L153,36 L150,28 Z" fill="#ec4899"/>
-                    <rect x="25" y="32" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="42" y="32" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="59" y="32" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <path d="M122,17 Q138,19 144,26 L120,26 Z" fill="#1e293b"/>
-                  </svg>`
+          { 
+            id: 'shinkansen_n700a', name: 'N700A のぞみ', desc: '進化し続ける東海道新幹線！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 50,70 -->
+    <rect x="30" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="40" cy="68" r="3" fill="#1e293b" />
+    <circle cx="60" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="40" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="40" cy="72" r="2" fill="#0f172a" />
+    <circle cx="60" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="60" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="48" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="40" y1="72" x2="60" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 120,70 -->
+    <rect x="100" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="110" cy="68" r="3" fill="#1e293b" />
+    <circle cx="130" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="110" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="110" cy="72" r="2" fill="#0f172a" />
+    <circle cx="130" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="130" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="118" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="110" y1="72" x2="130" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,27 175,25 160,25 L10,25 Z" fill="#f8fafc" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L160,60 C185,60 205,50 205,40 C205,27 175,25 160,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,39 L160,39 C175,39 190,41 200,40 L195,40 C185,43 160,43 10,43 Z" fill="#2563eb" />
+    <path d="M165,28 Q185,33 190,41 L165,41 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="205" cy="42" r="2.5" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
-            id: 'kuroshio', name: '特急くろしお', desc: '南紀の海沿いを走るオーシャンブルー特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <circle cx="26" cy="47" r="2.5" fill="#1e293b"/> <circle cx="34" cy="47" r="2.5" fill="#1e293b"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,12 L120,12 C140,12 154,24 157,42 L5,42 Z" fill="#f8fafc"/>
-                    <path d="M5,26 L157,26 L157,32 L5,32 Z" fill="#0ea5e9"/>
-                    <path d="M5,40 L157,40 L157,42 L5,42 Z" fill="#0284c7"/>
-                    <rect x="25" y="18" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="42" y="18" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="59" y="18" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <path d="M122,18 Q138,20 145,27 L120,27 Z" fill="#0f172a"/>
-                  </svg>`
+          { 
+            id: 'alfarex', name: 'ALFA-X', desc: '時速400kmを目指す次世代新幹線！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 50,70 -->
+    <rect x="30" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="40" cy="68" r="3" fill="#1e293b" />
+    <circle cx="60" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="40" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="40" cy="72" r="2" fill="#0f172a" />
+    <circle cx="60" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="60" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="48" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="40" y1="72" x2="60" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 120,70 -->
+    <rect x="100" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="110" cy="68" r="3" fill="#1e293b" />
+    <circle cx="130" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="110" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="110" cy="72" r="2" fill="#0f172a" />
+    <circle cx="130" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="130" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="118" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="110" y1="72" x2="130" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,30 170,25 150,25 L10,25 Z" fill="#94a3b8" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L150,60 C170,60 200,55 210,45 C210,30 170,25 150,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,37 L145,37 C165,37 180,40 190,45 L185,45 C170,41 150,41 10,41 Z" fill="#00a86b" />
+    <path d="M155,27 Q175,30 185,38 L160,38 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="205" cy="42" r="2.5" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
-            id: 'tsubasa', name: 'E3系 つばさ', desc: '山形新幹線！華やかなおしどりカラー！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <circle cx="26" cy="47" r="2.5" fill="#1e293b"/> <circle cx="34" cy="47" r="2.5" fill="#1e293b"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,12 L110,12 C132,12 152,24 157,42 L5,42 Z" fill="#f8fafc"/>
-                    <path d="M5,12 L105,12 C125,12 142,20 148,26 L5,26 Z" fill="#2e1065"/>
-                    <path d="M5,26 L152,26 L154,28 L5,28 Z" fill="#f97316"/>
-                    <rect x="25" y="30" width="12" height="6" rx="1" fill="#0f172a"/>
-                    <rect x="42" y="30" width="12" height="6" rx="1" fill="#0f172a"/>
-                    <rect x="59" y="30" width="12" height="6" rx="1" fill="#0f172a"/>
-                    <path d="M118,17 Q134,19 140,25 L116,25 Z" fill="#0f172a"/>
-                  </svg>`
+          { 
+            id: 'yamanote', name: 'E235系 山手線', desc: '東京のど真ん中をぐるぐる回る電車！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L190,60 L190,25 L10,25 Z" fill="#f8fafc" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L190,60 L190,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,35 L190,35 L190,39 L10,39 Z" fill="#84cc16" />
+    <path d="M190,27 L195,27 L195,43 L190,43 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <rect x="187" y="52" width="4" height="4" rx="1" fill="#fef08a" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
-            id: 'tsubame', name: '800系 つばめ', desc: '九州新幹線！和の意匠あふれる白いツバメ！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <circle cx="26" cy="47" r="2.5" fill="#1e293b"/> <circle cx="34" cy="47" r="2.5" fill="#1e293b"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,12 L115,12 C135,12 152,24 157,42 L5,42 Z" fill="#f8fafc"/>
-                    <path d="M5,32 L157,32 L157,35 L5,35 Z" fill="#dc2626"/>
-                    <path d="M5,36 L157,36 L157,37 L5,37 Z" fill="#d97706"/>
-                    <rect x="25" y="19" width="12" height="7" rx="1" fill="#0f172a"/>
-                    <rect x="42" y="19" width="12" height="7" rx="1" fill="#0f172a"/>
-                    <rect x="59" y="19" width="12" height="7" rx="1" fill="#0f172a"/>
-                    <path d="M122,19 Q138,21 144,27 L120,27 Z" fill="#0f172a"/>
-                    <!-- Headlight -->
-                    <circle cx="152" cy="38" r="1.5" fill="#fef08a"/>
-                  </svg>`
+          { 
+            id: 'chuo', name: 'E233系 中央線', desc: 'オレンジ色の帯が目印の快速電車！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L190,60 L190,25 L10,25 Z" fill="#f8fafc" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L190,60 L190,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,35 L190,35 L190,39 L10,39 Z" fill="#f97316" />
+    <path d="M190,27 L195,27 L195,43 L190,43 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <rect x="187" y="52" width="4" height="4" rx="1" fill="#fef08a" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
-            id: 'thunderbird', name: '特急サンダーバード', desc: '北陸を颯爽と走る雷鳥特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,12 L120,12 C140,12 154,24 157,42 L5,42 Z" fill="#f8fafc"/>
-                    <path d="M5,22 L157,22 L157,30 L5,30 Z" fill="#334155"/>
-                    <path d="M5,30 L157,30 L157,32 L5,32 Z" fill="#2563eb"/>
-                    <rect x="25" y="23" width="12" height="5" rx="0.5" fill="#e0f2fe"/>
-                    <rect x="42" y="23" width="12" height="5" rx="0.5" fill="#e0f2fe"/>
-                    <rect x="59" y="23" width="12" height="5" rx="0.5" fill="#e0f2fe"/>
-                    <path d="M122,22 Q138,23 145,28 L120,28 Z" fill="#0f172a"/>
-                  </svg>`
+          { 
+            id: 'keihin', name: 'E233系 京浜東北線', desc: '水色の帯がさわやかな電車！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L190,60 L190,25 L10,25 Z" fill="#f8fafc" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L190,60 L190,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,35 L190,35 L190,39 L10,39 Z" fill="#06b6d4" />
+    <path d="M190,27 L195,27 L195,43 L190,43 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <rect x="187" y="52" width="4" height="4" rx="1" fill="#fef08a" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
-            id: 'yufuinnomori', name: '特急 ゆふいんの森', desc: '由布院へ向かうクラシックグリーン特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#1e293b"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#1e293b"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,10 L125,10 C145,10 156,22 157,42 L5,42 Z" fill="#047857"/>
-                    <path d="M5,28 L157,28 L157,30 L5,30 Z" fill="#eab308"/>
-                    <!-- High Deck Windows -->
-                    <rect x="25" y="14" width="14" height="10" rx="1" fill="#1e293b"/>
-                    <rect x="45" y="14" width="14" height="10" rx="1" fill="#1e293b"/>
-                    <rect x="65" y="14" width="14" height="10" rx="1" fill="#1e293b"/>
-                    <path d="M128,14 Q145,17 150,26 L124,26 Z" fill="#1e293b"/>
-                    <!-- Lower grille -->
-                    <rect x="135" y="35" width="10" height="5" fill="#0f172a" rx="1"/>
-                  </svg>`
+          { 
+            id: 'sobu', name: 'E231系 総武線', desc: '黄色の帯で元気に走る各駅停車！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L190,60 L190,25 L10,25 Z" fill="#f8fafc" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L190,60 L190,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,35 L190,35 L190,39 L10,39 Z" fill="#eab308" />
+    <path d="M190,27 L195,27 L195,43 L190,43 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <rect x="187" y="52" width="4" height="4" rx="1" fill="#fef08a" />
+    <rect x="25" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="27" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="55" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="57" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="85" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="87" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="115" y="32" width="18" height="10" rx="3" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1" />
+    <rect x="117" y="33" width="14" height="4" rx="1" fill="white" opacity="0.2" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
-            id: 'hinotori', name: '近鉄特急 ひのとり', desc: '名古屋〜大阪を結ぶ真紅のプレミアム特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#1e293b"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#1e293b"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,12 L115,12 C135,12 152,24 157,42 L5,42 Z" fill="#991b1b"/>
-                    <path d="M5,12 L110,12 C130,12 145,20 150,26 L5,26 Z" fill="#0f172a"/>
-                    <path d="M5,32 L157,32 L157,34 L5,34 Z" fill="#eab308"/>
-                    <rect x="25" y="27" width="12" height="6" rx="1" fill="#0f172a"/>
-                    <rect x="42" y="27" width="12" height="6" rx="1" fill="#0f172a"/>
-                    <rect x="59" y="27" width="12" height="6" rx="1" fill="#0f172a"/>
-                    <path d="M122,17 Q138,19 145,26 L120,26 Z" fill="#eab308"/>
-                    <!-- Headlight -->
-                    <circle cx="152" cy="38" r="1.5" fill="#ffffff"/>
-                  </svg>`
+          { 
+            id: 'narita', name: 'E259系 成田エクスプレス', desc: '赤と黒の飛行機マークの特急！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L190,60 L200,45 L190,25 L10,25 Z" fill="#dc2626" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L190,60 L200,45 L190,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,60 L190,60 L200,45 C200,40 195,40 190,40 L10,40 Z" fill="#f8fafc" />
+    <path d="M10,60 L190,60 L200,45 C200,40 195,40 190,40 L10,40 Z" fill="url(#grad-metal)" />
+    <path d="M10,37 L190,37 L195,45 L185,42 L180,42 L188,41 L10,41 Z" fill="#1e293b" />
+    <path d="M188,27 L195,45 L190,45 L183,27 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="196,44 200,47 198,50 194,50" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <polygon points="22,34 34,34 38,42 26,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="23,35 33,35 37,41 27,41" fill="white" opacity="0.1" />
+    <polygon points="52,34 64,34 68,42 56,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="53,35 63,35 67,41 57,41" fill="white" opacity="0.1" />
+    <polygon points="82,34 94,34 98,42 86,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="83,35 93,35 97,41 87,41" fill="white" opacity="0.1" />
+    <polygon points="112,34 124,34 128,42 116,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="113,35 123,35 127,41 117,41" fill="white" opacity="0.1" />
+    <polygon points="142,34 154,34 158,42 146,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="143,35 153,35 157,41 147,41" fill="white" opacity="0.1" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          // === ここから新規追加6車両 ===
-          {
-            id: 'saphir', name: 'サフィール踊り子', desc: '伊豆の海と空を思わせるプレミアム特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,12 L120,12 C140,12 154,24 157,42 L5,42 Z" fill="#1e3a8a"/> <!-- Deep Blue -->
-                    <!-- White Stripe -->
-                    <path d="M5,30 L157,30 L157,32 L5,32 Z" fill="#f8fafc"/>
-                    <!-- Large Windows -->
-                    <rect x="20" y="16" width="15" height="10" rx="1.5" fill="#0f172a"/>
-                    <rect x="40" y="16" width="15" height="10" rx="1.5" fill="#0f172a"/>
-                    <rect x="60" y="16" width="15" height="10" rx="1.5" fill="#0f172a"/>
-                    <!-- Front Cabin -->
-                    <path d="M125,18 Q140,20 148,28 L122,28 Z" fill="#0f172a"/>
-                    <!-- Skylight windows (roof) -->
-                    <rect x="25" y="13" width="10" height="2" fill="#334155"/>
-                    <rect x="45" y="13" width="10" height="2" fill="#334155"/>
-                    <rect x="65" y="13" width="10" height="2" fill="#334155"/>
-                  </svg>`
+          { 
+            id: 'saphir', name: 'サフィール踊り子', desc: 'プレミアムな青いボディの豪華特急！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L170,60 C200,60 205,25 170,25 L10,25 Z" fill="#1e3a8a" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L170,60 C200,60 205,25 170,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,39 L170,39 C190,39 195,43 195,45 L190,45 C190,43 170,43 10,43 Z" fill="#eab308" />
+    <path d="M175,29 Q195,31 195,40 L175,40 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="202" cy="50" r="3" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <circle cx="30" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="28" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="60" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="58" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="90" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="88" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="120" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="118" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="150" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="148" cy="36" r="2" fill="white" opacity="0.3" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
-            id: 'kaiji', name: '特急かいじ (E353系)', desc: '甲斐路を走るあずさの兄弟特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <path d="M5,12 L115,12 C135,12 152,24 157,42 L5,42 Z" fill="#f8fafc"/>
-                    <!-- Black Mask -->
-                    <path d="M5,12 L110,12 C130,12 145,22 150,28 L5,28 Z" fill="#0f172a"/>
-                    <!-- Purple Stripe -->
-                    <path d="M5,28 L152,28 L154,30 L5,30 Z" fill="#581c87"/>
-                    <!-- Pink Accent -->
-                    <path d="M152,28 L155,36 L153,36 L150,28 Z" fill="#ec4899"/>
-                    <rect x="25" y="32" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="42" y="32" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <rect x="59" y="32" width="12" height="6" rx="1.5" fill="#0f172a"/>
-                    <!-- 'Kaiji' logo mark placeholder -->
-                    <circle cx="85" cy="35" r="3" fill="#581c87"/>
-                    <path d="M122,17 Q138,19 144,26 L120,26 Z" fill="#1e293b"/>
-                  </svg>`
+          { 
+            id: 'kaiji', name: '特急かいじ (E353系)', desc: '紫のストライプと鋭い顔つき！',
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L190,60 L200,45 L190,25 L10,25 Z" fill="#f8fafc" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L190,60 L200,45 L190,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,37 L190,37 L195,45 L185,42 L180,42 L188,41 L10,41 Z" fill="#7e22ce" />
+    <path d="M188,27 L195,45 L190,45 L183,27 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="196,44 200,47 198,50 194,50" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <polygon points="22,34 34,34 38,42 26,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="23,35 33,35 37,41 27,41" fill="white" opacity="0.1" />
+    <polygon points="52,34 64,34 68,42 56,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="53,35 63,35 67,41 57,41" fill="white" opacity="0.1" />
+    <polygon points="82,34 94,34 98,42 86,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="83,35 93,35 97,41 87,41" fill="white" opacity="0.1" />
+    <polygon points="112,34 124,34 128,42 116,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="113,35 123,35 127,41 117,41" fill="white" opacity="0.1" />
+    <polygon points="142,34 154,34 158,42 146,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="143,35 153,35 157,41 147,41" fill="white" opacity="0.1" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
+          { 
             id: 'sonic', name: '特急ソニック (883系)', desc: 'メタリックブルーの振り子式特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#1e293b"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#1e293b"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <!-- Sonic Metallic Blue Body -->
-                    <path d="M5,15 L120,15 C135,15 145,25 148,42 L5,42 Z" fill="#1d4ed8"/>
-                    <!-- Yellow Front panel -->
-                    <path d="M148,30 L155,30 L155,42 L148,42 Z" fill="#eab308"/>
-                    <!-- Robot-like nose -->
-                    <rect x="148" y="25" width="5" height="5" fill="#0f172a" rx="1"/>
-                    <!-- Windows -->
-                    <rect x="25" y="24" width="12" height="7" rx="1" fill="#0f172a"/>
-                    <rect x="42" y="24" width="12" height="7" rx="1" fill="#0f172a"/>
-                    <rect x="59" y="24" width="12" height="7" rx="1" fill="#0f172a"/>
-                    <path d="M125,24 Q135,24 142,30 L125,30 Z" fill="#0f172a"/>
-                    <!-- Logo mark abstract -->
-                    <circle cx="15" cy="27" r="4" fill="#ffffff"/>
-                    <text x="13" y="29" font-size="6" fill="#1d4ed8" font-family="sans-serif" font-weight="bold">S</text>
-                  </svg>`
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L190,60 L200,45 L190,25 L10,25 Z" fill="#1d4ed8" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L190,60 L200,45 L190,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,37 L190,37 L195,45 L185,42 L180,42 L188,41 L10,41 Z" fill="#eab308" />
+    <path d="M188,27 L195,45 L190,45 L183,27 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="196,44 200,47 198,50 194,50" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <polygon points="22,34 34,34 38,42 26,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="23,35 33,35 37,41 27,41" fill="white" opacity="0.1" />
+    <polygon points="52,34 64,34 68,42 56,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="53,35 63,35 67,41 57,41" fill="white" opacity="0.1" />
+    <polygon points="82,34 94,34 98,42 86,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="83,35 93,35 97,41 87,41" fill="white" opacity="0.1" />
+    <polygon points="112,34 124,34 128,42 116,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="113,35 123,35 127,41 117,41" fill="white" opacity="0.1" />
+    <polygon points="142,34 154,34 158,42 146,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="143,35 153,35 157,41 147,41" fill="white" opacity="0.1" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
+          { 
             id: 'hokuto', name: '特急北斗 (キハ261系)', desc: '北海道の大地を力強く走る気動車特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <!-- Bogies -->
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <!-- Body Base -->
-                    <path d="M5,14 L125,14 C140,14 150,22 153,42 L5,42 Z" fill="#f8fafc"/>
-                    <!-- Top Purple/Blue -->
-                    <path d="M5,14 L120,14 C130,14 135,18 140,25 L5,25 Z" fill="#312e81"/>
-                    <!-- Yellow Stripe -->
-                    <path d="M5,25 L140,25 L142,27 L5,27 Z" fill="#eab308"/>
-                    <rect x="25" y="30" width="12" height="6" rx="1" fill="#0f172a"/>
-                    <rect x="42" y="30" width="12" height="6" rx="1" fill="#0f172a"/>
-                    <rect x="59" y="30" width="12" height="6" rx="1" fill="#0f172a"/>
-                    <path d="M125,17 Q135,19 140,25 L120,25 Z" fill="#0f172a"/>
-                    <rect x="145" y="35" width="5" height="5" fill="#fef08a"/>
-                  </svg>`
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L190,60 L200,45 L190,25 L10,25 Z" fill="#f8fafc" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L190,60 L200,45 L190,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,60 L190,60 L200,45 C200,40 195,40 190,40 L10,40 Z" fill="#1e40af" />
+    <path d="M10,60 L190,60 L200,45 C200,40 195,40 190,40 L10,40 Z" fill="url(#grad-metal)" />
+    <path d="M10,37 L190,37 L195,45 L185,42 L180,42 L188,41 L10,41 Z" fill="#eab308" />
+    <path d="M188,27 L195,45 L190,45 L183,27 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="196,44 200,47 198,50 194,50" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <polygon points="22,34 34,34 38,42 26,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="23,35 33,35 37,41 27,41" fill="white" opacity="0.1" />
+    <polygon points="52,34 64,34 68,42 56,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="53,35 63,35 67,41 57,41" fill="white" opacity="0.1" />
+    <polygon points="82,34 94,34 98,42 86,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="83,35 93,35 97,41 87,41" fill="white" opacity="0.1" />
+    <polygon points="112,34 124,34 128,42 116,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="113,35 123,35 127,41 117,41" fill="white" opacity="0.1" />
+    <polygon points="142,34 154,34 158,42 146,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="143,35 153,35 157,41 147,41" fill="white" opacity="0.1" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
+          { 
             id: 'rapit', name: '南海ラピート', desc: '鉄人28号みたいなレトロフューチャー特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#0f172a"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#0f172a"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#475569"/>
-                    <!-- Deep Blue Body -->
-                    <path d="M5,10 L110,10 C135,10 152,25 155,42 L5,42 Z" fill="#1e3a5f"/>
-                    <!-- Round windows -->
-                    <circle cx="30" cy="25" r="5" fill="#0f172a"/>
-                    <circle cx="50" cy="25" r="5" fill="#0f172a"/>
-                    <circle cx="70" cy="25" r="5" fill="#0f172a"/>
-                    <!-- Front Cabin (Sphere-like nose) -->
-                    <path d="M120,18 Q135,20 145,28 L115,28 Z" fill="#0f172a"/>
-                    <!-- Front Grille/Lights -->
-                    <circle cx="150" cy="38" r="2" fill="#fef08a"/>
-                    <path d="M140,35 Q145,35 150,42 L140,42 Z" fill="#0f172a"/>
-                  </svg>`
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L170,60 C200,60 205,25 170,25 L10,25 Z" fill="#1e3a5f" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L170,60 C200,60 205,25 170,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M175,29 Q195,31 195,40 L175,40 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="202" cy="50" r="3" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <circle cx="30" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="28" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="60" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="58" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="90" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="88" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="120" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="118" cy="36" r="2" fill="white" opacity="0.3" />
+    <circle cx="150" cy="38" r="7" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <circle cx="148" cy="36" r="2" fill="white" opacity="0.3" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           },
-          {
+          { 
             id: 'spacia_x', name: 'スペーシアX', desc: '六角形の窓がかっこいい最新の豪華特急！',
-            svg: `<svg viewBox="0 0 160 50" class="w-full h-full drop-shadow-md">
-                    <rect x="22" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <rect x="52" y="44" width="16" height="4" rx="1" fill="#334155"/>
-                    <path d="M5,42 L150,42 C154,42 157,44 157,45 L5,45 Z" fill="#94a3b8"/>
-                    <!-- Pearl White Body -->
-                    <path d="M5,12 L120,12 C140,12 154,24 157,42 L5,42 Z" fill="#f8fafc"/>
-                    <!-- Black Window Band -->
-                    <path d="M5,22 L155,22 C156,22 157,28 157,32 L5,32 Z" fill="#1e293b"/>
-                    <!-- Hexagon Windows (simulated) -->
-                    <polygon points="25,24 30,22 35,24 35,30 30,32 25,30" fill="#e2e8f0" opacity="0.3"/>
-                    <polygon points="45,24 50,22 55,24 55,30 50,32 45,30" fill="#e2e8f0" opacity="0.3"/>
-                    <polygon points="65,24 70,22 75,24 75,30 70,32 65,30" fill="#e2e8f0" opacity="0.3"/>
-                    <polygon points="85,24 90,22 95,24 95,30 90,32 85,30" fill="#e2e8f0" opacity="0.3"/>
-                    <!-- Front Mask -->
-                    <path d="M125,22 Q140,24 150,32 L120,32 Z" fill="#0f172a"/>
-                    <!-- Light -->
-                    <path d="M152,38 L155,38 L156,40 L152,40 Z" fill="#fef08a"/>
-                  </svg>`
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
+  <defs>
+    <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="50.1%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+    <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="grad-metal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="white" stop-opacity="0.0" />
+      <stop offset="100%" stop-color="black" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+    <!-- Bogie at 40,70 -->
+    <rect x="20" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="30" cy="68" r="3" fill="#1e293b" />
+    <circle cx="50" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="30" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="30" cy="72" r="2" fill="#0f172a" />
+    <circle cx="50" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="50" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="38" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="30" y1="72" x2="50" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Bogie at 130,70 -->
+    <rect x="110" y="62" width="40" height="12" rx="3" fill="url(#grad-bogie)" stroke="#1e293b" stroke-width="1.5" />
+    <!-- Axle joints -->
+    <circle cx="120" cy="68" r="3" fill="#1e293b" />
+    <circle cx="140" cy="68" r="3" fill="#1e293b" />
+    <!-- Wheels -->
+    <circle cx="120" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="120" cy="72" r="2" fill="#0f172a" />
+    <circle cx="140" cy="72" r="7" fill="none" stroke="url(#grad-wheel)" stroke-width="3" />
+    <circle cx="140" cy="72" r="2" fill="#0f172a" />
+    <!-- Springs -->
+    <rect x="128" y="62" width="4" height="6" fill="#64748b" />
+    <line x1="120" y1="72" x2="140" y2="72" stroke="#475569" stroke-width="1.5" />
+
+    <!-- Pantograph at 70,25 -->
+    <!-- Base -->
+    <rect x="62" y="25" width="16" height="3" rx="1" fill="#475569" />
+    <!-- Lower arm -->
+    <path d="M65,25 L78,13" stroke="#64748b" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M73,25 L78,13" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <!-- Upper arm -->
+    <path d="M78,13 L66,3" stroke="#64748b" stroke-width="2" fill="none" stroke-linecap="round" />
+    <!-- Head/Shoe -->
+    <rect x="60" y="1" width="12" height="2" rx="1" fill="#cbd5e1" />
+    <path d="M66,3 L66,1" stroke="#475569" stroke-width="2" />
+
+    <!-- Base Chassis -->
+    <path d="M5,60 L205,60 L205,64 L5,64 Z" fill="#334155" />
+    
+    <!-- Main Body Base -->
+    <path d="M10,60 L190,60 L200,45 L190,25 L10,25 Z" fill="#f8fafc" />
+    <!-- Gradient Overlay for Realism -->
+    <path d="M10,60 L190,60 L200,45 L190,25 L10,25 Z" fill="url(#grad-metal)" />
+    <path d="M10,37 L190,37 L195,45 L185,42 L180,42 L188,41 L10,41 Z" fill="#1e293b" />
+    <path d="M188,27 L195,45 L190,45 L183,27 Z" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="196,44 200,47 198,50 194,50" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <polygon points="22,34 34,34 38,42 26,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="23,35 33,35 37,41 27,41" fill="white" opacity="0.1" />
+    <polygon points="52,34 64,34 68,42 56,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="53,35 63,35 67,41 57,41" fill="white" opacity="0.1" />
+    <polygon points="82,34 94,34 98,42 86,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="83,35 93,35 97,41 87,41" fill="white" opacity="0.1" />
+    <polygon points="112,34 124,34 128,42 116,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="113,35 123,35 127,41 117,41" fill="white" opacity="0.1" />
+    <polygon points="142,34 154,34 158,42 146,42" fill="url(#grad-glass)" stroke="#1e293b" stroke-width="1.5" />
+    <polygon points="143,35 153,35 157,41 147,41" fill="white" opacity="0.1" />
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" />
+    <rect x="12" y="32" width="4" height="10" rx="0.5" fill="url(#grad-glass)" />
+</svg>`
           }
+        ];
+
         ];
 
         const totalTrainCards = trainList.length;
