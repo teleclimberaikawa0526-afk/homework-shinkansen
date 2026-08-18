@@ -3128,8 +3128,19 @@
           if (points.value < 10) return;
           initAudio();
           points.value -= 10;
-          const randomIndex = Math.floor(Math.random() * trainList.length);
-          const winTrain = trainList[randomIndex];
+          
+          let winTrain = null;
+          const unownedTrains = trainList.filter(t => !collectedTrains.value.includes(t.id));
+          
+          // 50%の確率で未所持の電車から選ぶ
+          if (unownedTrains.length > 0 && Math.random() < 0.5) {
+            const randomIndex = Math.floor(Math.random() * unownedTrains.length);
+            winTrain = unownedTrains[randomIndex];
+          } else {
+            // それ以外は全種類からランダム
+            const randomIndex = Math.floor(Math.random() * trainList.length);
+            winTrain = trainList[randomIndex];
+          }
 
           if (!collectedTrains.value.includes(winTrain.id)) {
             collectedTrains.value.push(winTrain.id);
