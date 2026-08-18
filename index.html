@@ -581,7 +581,7 @@
       <p class="text-[9px] text-slate-500 mb-4">タップすると「はっしゃの電車」をえらべるよ！</p>
 
       <div class="grid grid-cols-2 gap-3 w-full">
-        <div v-for="train in trainList" :key="train.id" 
+        <div v-for="train in trainList.filter(t => !t.secret || isUnlocked(t.id))" :key="train.id" 
              @click="isUnlocked(train.id) && selectTrain(train.id)"
              :class="[
                isUnlocked(train.id) ? 'bg-slate-800 border-slate-700 cursor-pointer' : 'bg-slate-200 border-slate-300 opacity-50',
