@@ -3227,7 +3227,6 @@
             winTrain = unownedTrains[randomIndex];
           } else {
             // それ以外は全種類からランダム
-            const randomIndex = Math.floor(Math.random() * trainList.length);
             const normalTrains = trainList.filter(t => !t.secret);
             const randomIndex = Math.floor(Math.random() * normalTrains.length);
             winTrain = normalTrains[randomIndex];
