@@ -531,6 +531,27 @@
         </div>
       </div>
 
+      
+      <!-- シークレット達成モーダル -->
+      <div v-if="showSecretModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6">
+        <div class="bg-gradient-to-b from-sky-900 to-indigo-900 border-4 border-sky-300 rounded-3xl p-6 text-center max-w-md w-full relative drop-shadow-[0_0_30px_rgba(56,189,248,0.8)]">
+          <div class="animate-bounce mb-2 text-5xl">✨🏅✨</div>
+          <h2 class="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500 mb-2">達成ボーナス！</h2>
+          <p class="text-sm font-bold text-white mb-6">
+            8/27の時点で宿題を85%以上クリアした君に<br>
+            特別なシークレット車両をプレゼント！！
+          </p>
+          <div class="bg-black/50 border-2 border-sky-400 rounded-2xl p-4 mb-6 relative overflow-hidden">
+            <div class="absolute inset-0 bg-sky-400/20 animate-pulse"></div>
+            <div class="h-24 flex items-center justify-center w-full relative z-10" v-html="trainList.find(t => t.id === 'linear_secret').svg"></div>
+            <p class="text-lg font-extrabold text-white mt-2 relative z-10">L0系 リニア (シークレット)</p>
+          </div>
+          <button @click="showSecretModal = false" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 py-3 rounded-xl font-extrabold text-lg border-2 border-yellow-300 shadow-[0_0_15px_rgba(250,204,21,0.6)] hover:brightness-110 active:scale-95 transition-all">
+            受け取る！
+          </button>
+        </div>
+      </div>
+
       <!-- ガチャの当たり演出ポップアップ -->
       <div v-if="gachaResult" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-6">
         <div class="bg-white border-4 border-slate-800 rounded-3xl p-6 text-center max-w-sm w-full relative">
@@ -715,9 +736,77 @@
         const points = ref(0);
         const collectedTrains = ref(['hayabusa']);
         const gachaResult = ref(null);
+        const hasClaimedSecretTrain = ref(false);
+        const showSecretModal = ref(false);
 
         // 車体後部が平らなリアルSVGイラスト群 (16種類)
                 const trainList = [
+          { 
+            id: 'linear_secret', name: 'L0系 リニア (シークレット)', desc: '時速500kmで浮上して走る夢の超特急！', secret: true,
+            svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-[0_0_15px_rgba(56,189,248,0.8)] overflow-visible">
+    <defs>
+      <linearGradient id="grad-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#334155" />
+        <stop offset="50%" stop-color="#0f172a" />
+        <stop offset="50.1%" stop-color="#1e293b" />
+        <stop offset="100%" stop-color="#020617" />
+      </linearGradient>
+      <linearGradient id="grad-wheel" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#94a3b8" />
+        <stop offset="100%" stop-color="#334155" />
+      </linearGradient>
+      <linearGradient id="grad-bogie" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#475569" />
+        <stop offset="100%" stop-color="#0f172a" />
+      </linearGradient>
+      <linearGradient id="grad-metal-linear" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#f8fafc" />
+        <stop offset="70%" stop-color="#cbd5e1" />
+        <stop offset="100%" stop-color="#94a3b8" />
+      </linearGradient>
+    </defs>
+    
+    <!-- Base Chassis / Hover Effect -->
+    <path d="M5,62 L205,62 L205,65 L5,65 Z" fill="#0ea5e9" filter="drop-shadow(0 0 5px #0ea5e9)" />
+    
+    <!-- Main Body Base (Super Long Nose for Linear) -->
+    <path d="M10,60 L140,60 C170,60 205,55 215,50 C218,48 215,40 205,35 C180,25 150,22 10,22 Z" fill="url(#grad-metal-linear)" />
+    
+    <!-- Blue Stripe -->
+    <path d="M10,40 L145,40 C170,40 195,43 210,48 L200,48 C185,44 165,42 10,42 Z" fill="#0284c7" filter="drop-shadow(0 0 2px #38bdf8)" />
+
+    <!-- Window Band -->
+    <path d="M10,30 L130,30 C150,30 170,33 185,38 L180,38 C165,34 140,32 10,32 Z" fill="#1e293b" />
+    
+    <!-- Front Glass -->
+    <path d="M165,28 Q185,31 200,38 L175,38 Z" fill="url(#grad-glass)" stroke="#0ea5e9" stroke-width="1.5" filter="drop-shadow(0 0 2px #0ea5e9)" />
+    
+    <!-- Headlights -->
+    <polygon points="212,49 216,49 214,51 210,51" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    <polygon points="213,46 217,46 215,48 211,48" fill="#fef08a" filter="drop-shadow(0 0 4px #fef08a)" />
+    
+    <!-- Windows -->
+    <rect x="25" y="31" width="18" height="6" rx="2" fill="url(#grad-glass)" stroke="#0284c7" stroke-width="1" />
+    <rect x="55" y="31" width="18" height="6" rx="2" fill="url(#grad-glass)" stroke="#0284c7" stroke-width="1" />
+    <rect x="85" y="31" width="18" height="6" rx="2" fill="url(#grad-glass)" stroke="#0284c7" stroke-width="1" />
+    <rect x="115" y="31" width="18" height="6" rx="2" fill="url(#grad-glass)" stroke="#0284c7" stroke-width="1" />
+    
+    <!-- Door -->
+    <rect x="10" y="27" width="8" height="30" rx="1" fill="#e2e8f0" stroke="#0ea5e9" stroke-width="1" />
+    <rect x="12" y="30" width="4" height="8" rx="0.5" fill="url(#grad-glass)" />
+    
+    <!-- Maglev Coils (Instead of wheels) -->
+    <rect x="30" y="60" width="30" height="6" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+    <rect x="32" y="62" width="6" height="2" fill="#0ea5e9" />
+    <rect x="42" y="62" width="6" height="2" fill="#0ea5e9" />
+    <rect x="52" y="62" width="6" height="2" fill="#0ea5e9" />
+    
+    <rect x="110" y="60" width="30" height="6" rx="2" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
+    <rect x="112" y="62" width="6" height="2" fill="#0ea5e9" />
+    <rect x="122" y="62" width="6" height="2" fill="#0ea5e9" />
+    <rect x="132" y="62" width="6" height="2" fill="#0ea5e9" />
+</svg>`
+          },
           { 
             id: 'hayabusa', name: 'E5系 はやぶさ', desc: '最高時速320kmのグリーン超特急！',
             svg: `<svg viewBox="0 0 220 80" class="w-full h-full drop-shadow-lg overflow-visible">
@@ -2649,7 +2738,7 @@
           }
         ];
 
-        const totalTrainCards = trainList.length;
+        const totalTrainCards = trainList.filter(t => !t.secret).length;
 
         // 音声機能
         let audioCtx = null;
@@ -3130,7 +3219,7 @@
           points.value -= 10;
           
           let winTrain = null;
-          const unownedTrains = trainList.filter(t => !collectedTrains.value.includes(t.id));
+          const unownedTrains = trainList.filter(t => !t.secret && !collectedTrains.value.includes(t.id));
           
           // 50%の確率で未所持の電車から選ぶ
           if (unownedTrains.length > 0 && Math.random() < 0.5) {
@@ -3139,7 +3228,9 @@
           } else {
             // それ以外は全種類からランダム
             const randomIndex = Math.floor(Math.random() * trainList.length);
-            winTrain = trainList[randomIndex];
+            const normalTrains = trainList.filter(t => !t.secret);
+            const randomIndex = Math.floor(Math.random() * normalTrains.length);
+            winTrain = normalTrains[randomIndex];
           }
 
           if (!collectedTrains.value.includes(winTrain.id)) {
@@ -3163,12 +3254,36 @@
             missions: missions.value,
             luggage: luggage.value,
             points: points.value,
+            hasClaimedSecretTrain: hasClaimedSecretTrain.value,
             collectedTrains: collectedTrains.value,
             selectedTrainId: selectedTrainId.value,
             daysList: daysList.value
           };
           localStorage.setItem('shinkansen_homework_data_v8', JSON.stringify(data));
         };
+
+        
+        const checkSecretTrain = () => {
+          if (hasClaimedSecretTrain.value) return;
+          const now = new Date();
+          // 8/27 of the current year
+          const targetDate = new Date(now.getFullYear(), 7, 27); 
+          if (now >= targetDate && totalProgress.value >= 85) {
+            hasClaimedSecretTrain.value = true;
+            showSecretModal.value = true;
+            if (!collectedTrains.value.includes('linear_secret')) {
+              collectedTrains.value.push('linear_secret');
+            }
+            selectedTrainId.value = 'linear_secret';
+            saveToLocalStorage();
+            playFanfare();
+            setTimeout(() => { startConfetti(); }, 100);
+          }
+        };
+
+        watch(totalProgress, () => {
+          checkSecretTrain();
+        });
 
         const loadFromLocalStorage = () => {
           const saved = localStorage.getItem('shinkansen_homework_data_v8') ||
@@ -3203,6 +3318,7 @@
                 collectedTrains.value = ['hayabusa'];
               }
               selectedTrainId.value = data.selectedTrainId || 'hayabusa';
+              hasClaimedSecretTrain.value = data.hasClaimedSecretTrain || false;
               if (data.daysList) daysList.value = data.daysList;
             } catch (e) {
               console.error('Data load error', e);
@@ -3212,6 +3328,7 @@
 
         onMounted(() => {
           loadFromLocalStorage();
+            checkSecretTrain();
           showDepartureModal.value = false;
           showBonusModal.value = false;
           
@@ -3242,6 +3359,8 @@
           trainList,
           totalTrainCards,
           gachaResult,
+            showSecretModal,
+            hasClaimedSecretTrain,
           totalProgress,
           completedMissionsCount,
           totalMissionsCount,
